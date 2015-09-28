@@ -1,0 +1,4 @@
+NOTE:
+You will probably have to "fiddle" with the Access Paths. The
+project is taken from "TutorialPRO.proj" and works as if it were
+buried inside the 'amulet:bin:MAC:misc' folder, ie at this level.

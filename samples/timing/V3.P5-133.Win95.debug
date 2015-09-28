@@ -1,0 +1,41 @@
+Summary (DEBUGGING on) (in msec for each):
+0.  1505 for Initialize
+1.  0.4026 for create objects from Root
+2.  1.0334 for destroy objects from Root
+3.  0.3452 for create objects from Root 2nd time
+4.  1.0784 for destroy objects from Root 2nd time
+5.  1.3128 for create objects from Am_Rectangle
+6.  0.0818 for set a NEW slot in obj
+7.  0.022 for set slot again diff objs
+8.  0.01387 for set MY_LEFT slot repeatedly in root
+9.  0.015 for set Am_LEFT slot repeatedly in rect
+10.  0.0078 for get value as Am_Value
+11.  0.008 for get value as int different objects
+12.  0.00463 for get value same rect as int
+13.  0.00339 for get value as Am_Object
+14.  0.02344 for set + get as int
+15.  0.2862 for install a constraint into MY_LEFT
+16.  0.0354 for set NEW_SLOT, invalidating all constraints
+17.  0.036 for one get which validates all constraints
+18.  0.07673 for set NEW_SLOT, get(MY_LEFT) from constraint
+19.  0.0106 for get value rect INHERITED one level
+20.  0.0136 for get value rect inherited TWO levels
+21.  0.00632 for get method and call it
+22.  110 for create window and update
+23.  2.51133 for update rect double-buffered
+24.  7.152 for update button double-buffered
+25.  4.154 for update triangle double-buffered
+26.  1.09167 for update rect NOT double-buffered
+27.  2.80267 for update button NOT double-buffered
+28.  1.56467 for update triangle NOT double-buffered
+29.  28 for destroy window containing polygon
+30.  0.6015 for pretend DOWN+UP, no interactors
+31.  1.694 for invoke one_shot_inter, no graphics
+32.  4.1935 for invoke one_shot_inter, toggle color
+33.  3.298 for move_grow_inter
+34.  0.3384 for Add_Part rect to window
+35.  4682 for Update Window with 5000 Rectangles
+36.  165.61 for update rect over other rects
+37.  122.2 for destroy objects while in window
+38.  202 for Cleanup
+

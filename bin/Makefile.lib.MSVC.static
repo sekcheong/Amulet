@@ -1,0 +1,73 @@
+#
+# Build static libraries for Microsoft Visual C++ (2.0 or later) 
+#  on Windows NT/95
+#
+
+CONSOLE_O= $(GEM_DIR)/console$(O)
+
+UTILS_LIB= $(LIB_DIR)/amutils$(LIB_MODIFIER).lib
+GEM_LIB= $(LIB_DIR)/amgem$(LIB_MODIFIER).lib
+ORE_LIB= $(LIB_DIR)/amobject$(LIB_MODIFIER).lib
+AMULET_LIB= $(LIB_DIR)/amulet$(LIB_MODIFIER).lib
+
+FULL_AMULET_DEPENDENCIES = $(OPAL_MODULE) $(INTER_MODULE) $(DEBUG_MODULE) \
+    $(WIDGETS_MODULE) $(GESTURE_MODULE) $(ANIM_MODULE) \
+    $(ORE_MODULE) $(GEM_MODULE) $(UTILS_MODULE)
+FULL_ORE_DEPENDENCIES = $(ORE_MODULE) $(UTILS_MODULE)
+FULL_GEM_DEPENDENCIES = $(GEM_MODULE) $(UTILS_MODULE)
+FULL_UTILS_DEPENDENCIES = $(UTILS_MODULE)
+
+# Undefine these parameters, for example
+#	AMULET_LIB_DEPENDENCIES =
+# to keep from rebuilding the Amulet libraries after deleting the
+# Amulet object files 
+AMULET_LIB_DEPENDENCIES = $(FULL_AMULET_DEPENDENCIES)
+ORE_LIB_DEPENDENCIES = $(FULL_ORE_DEPENDENCIES)
+GEM_LIB_DEPENDENCIES = $(FULL_GEM_DEPENDENCIES)
+UTILS_LIB_DEPENDENCIES = $(FULL_UTILS_DEPENDENCIES)
+
+$(AMULET_LIB): $(AMULET_LIB_DEPENDENCIES)
+	lib -nologo -out:$(AMULET_LIB) @<<
+$(FULL_AMULET_DEPENDENCIES)
+<<
+
+$(ORE_LIB): $(ORE_LIB_DEPENDENCIES)
+	lib -nologo -out:$(ORE_LIB) @<<
+$(FULL_ORE_DEPENDENCIES)
+<<
+
+$(GEM_LIB): $(GEM_LIB_DEPENDENCIES)
+	lib -nologo -out:$(GEM_LIB) @<<
+$(FULL_GEM_DEPENDENCIES)
+<<
+
+$(UTILS_LIB): $(UTILS_LIB_DEPENDENCIES)
+	lib -nologo -out:$(UTILS_LIB) @<<
+$(FULL_UTILS_DEPENDENCIES)
+<<
+
+
+# Use these declarations to compile tests from individual .o files
+
+NEEDS_GEM = $(GEM_LIB) $(CONSOLE_O)
+USES_GEM  = $(NEEDS_GEM) /link /SUBSYSTEM:WINDOWS 
+STATIC_GEM = $(NEEDS_GEM)
+
+NEEDS_ORE = $(ORE_LIB)
+USES_ORE  = $(NEEDS_ORE) /link /SUBSYSTEM:CONSOLE 
+STATIC_ORE = $(NEEDS_ORE)
+
+NEEDS_ALL = $(AMULET_LIB) $(CONSOLE_O)
+USES_ALL  = $(NEEDS_ALL) /link /SUBSYSTEM:WINDOWS 
+STATIC_ALL = $(NEEDS_ALL)
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# Inference rule
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+.cc$(O):
+	$(CC) $(CFLAGS) -c -Tp$< -Fo$@
+
+.cpp$(O):
+	$(CC) $(CFLAGS) -c -Tp$< -Fo$@

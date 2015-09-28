@@ -1,0 +1,76 @@
+##
+##  This file sets the Amulet Makefile variables for
+##  gcc on a Linux system with ELF support.
+##
+##  written by Gabor Herr (herr@iti.informatik.th-darmstadt.de)
+##  updated by Amulet group (amulet-bugs@cs.cmu.edu)
+##
+##  Note: this makefile.vars file was contributed by an Amulet user.  The
+##        Amulet group has not tested it on a Linux machine.  Please send
+##        any bug reports to amulet-bugs@cs.cmu.edu.
+##
+## If you experience the loader error when you try to run <application>:
+##	<application>: can't load library 'libamulet.so'
+## You may need to add /usr/local/amulet/lib to /etc/ld.so.conf and
+## run ldconfig. This will enable the dynamic loader to find the
+## library at runtime.  Alternatively you might add the directory to
+## LD_LIBRARY_PATH, or whatever that variable is called...
+## Check the file GCC-HOWTO.
+
+CC = g++
+LD = ld
+
+##
+## Parameters for Amulet programs
+## 
+
+# X11 directories, uncomment and set if necessary
+# X11_INC = -I/usr/X11R6/include
+# X11_LIB = -L /usr/X11R6/lib
+
+# compiler flags for Amulet programs
+AM_CFLAGS = -I$(AMULET_DIR)/include $(X11_INC) -Wall -fPIC \
+	    -DGCC -DMEMORY
+
+# libraries needed by Amulet (interactors needs math library)
+AM_LIBS = $(X11_LIB) -lX11 -lm 
+
+
+##
+## Parameters for the Amulet library
+## 
+
+# directory where Amulet will (eventually) be installed
+# defaults to its current location (AMULET_DIR)
+AMULET_ROOT=$(AMULET_DIR)
+
+# additional compiler flags for development version
+# users may want to add -ffast-math and -fomit-frame-pointer (x86 specific)
+# and up optimization to -O6
+AM_DEVELOP = -O3 -DDEBUG -g
+
+# additional compiler flags for release version
+# users may want to add -ffast-math and -fomit-frame-pointer (x86 specific)
+# and up optimization to -O6
+AM_RELEASE = -O3
+
+# additional compiler flags for optimized version with inspector and debugging enabled
+AM_INHOUSE = -DDEBUG -g
+
+# additional compiler flags for optimized version with inspector but no debugging symbols
+# users may want to add -ffast-math and -fomit-frame-pointer (x86 specific)
+# and up optimization to -O6
+AM_NODEBUGSYM = -O3 -DDEBUG
+
+# extra link flags for library test programs
+AM_LIB_LDFLAGS =
+
+# Makefile identifying the gem files for this platform
+AM_GEM_SOURCE = Makefile.gem.X
+
+# Makefile that knows how to make the Amulet library for this platform
+AM_SHARED_LIB_MAKE = Makefile.lib.gcc.shared
+AM_STATIC_LIB_MAKE = Makefile.lib.unix.static
+
+# Set of library variants for make libs
+AM_LIBS_TO_MAKE = all-libs

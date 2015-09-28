@@ -1,0 +1,70 @@
+/* ************************************************************************
+ *         The Amulet User Interface Development Environment              *
+ * ************************************************************************
+ * This code was written as part of the Amulet project at                 *
+ * Carnegie Mellon University, and has been placed in the public          *
+ * domain.  If you are using this code or any part of Amulet,             *
+ * please contact amulet@cs.cmu.edu to be put on the mailing list.        *
+ * ************************************************************************/
+
+#if __MWERKS__
+#  if (__dest_os == __mac_os)
+#    define _MACINTOSH          1
+#    ifdef powerc
+#      pragma precompile_target "AmuletHeadersPPC"
+#    else
+#      pragma precompile_target "AmuletHeaders68K"
+#    endif
+#  elif (__dest_os == __win32_os)
+#    error "Windows is not yet supported"
+#    define _WINDOWS            1
+#    pragma precompile_target "AmuletHeadersX86"
+#  else
+#    error "This file supports MacOS and Windows only"
+#  endif /* __dest_os == __mac_os */
+#endif
+
+// ANSI definitions
+#include <string.h>
+
+// ----------------------------  MAC Headers -------------------------
+#ifdef _MACINTOSH
+// Mac Toolbox definitions
+#define STRICT_WINDOWS  1
+#define STRICT_CONTROLS 1
+#define STRICT_MENUS    1
+#define STRICT_LISTS    1
+
+#define SystemSevenOrLater  1
+#define OLDROUTINENAMES     0
+#define OLDROUTINELOCATIONS 0
+#define CGLUESUPPORTED      1
+
+#include <Types.h>
+#include <DiskInit.h>
+#include <Devices.h>
+#include <Folders.h>
+#include <Fonts.h>
+#include <Gestalt.h>
+#include <Memory.h>
+#include <Processes.h>
+#include <QDOffscreen.h>
+#include <Quickdraw.h>
+#include <Resources.h>
+#include <Scrap.h>
+#include <Timer.h>
+#include <ToolUtils.h>
+#include <Windows.h>
+#include <Menus.h>
+#include <StandardFile.h>
+
+// uncomment this line if you want to use metrowerks profiler
+//#include <profiler.h>
+#endif
+
+// ----------------------------  Windows Headers -------------------------
+// [unsupported]
+#ifdef _WINDOWS
+#include "ansi_prefix.win32.h"
+#include <windows.h>
+#endif

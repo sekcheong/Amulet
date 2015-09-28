@@ -1,0 +1,13 @@
+#
+# GEM files for Microsoft Windows NT/95
+#
+
+GEM_MODULE = $(GEM_DIR)/gem_points$(O) $(GEM_DIR)/gem_keytrans$(O) \
+             $(GEM_DIR)/gemW_points$(O)                                \
+             $(GEM_DIR)/gemW_styles$(O) $(GEM_DIR)/gemW_draw$(O)       \
+             $(GEM_DIR)/gemW_text$(O) $(GEM_DIR)/gemW_image$(O)        \
+			 $(GEM_DIR)/gemW_winimage$(O) $(GEM_DIR)/gemW_bmpimage$(O) \
+			 $(GEM_DIR)/gemW_gifimage$(O) $(GEM_DIR)/gemW_cursor$(O)   \
+             $(GEM_DIR)/gemW_input$(O) $(GEM_DIR)/gemW_regions$(O)     \
+			 $(GEM_DIR)/gemW_line$(O) $(GEM_DIR)/gemW_misc$(O)         \
+			 $(GEM_DIR)/gemW_clean$(O) $(GEM_DIR)/gemW_time$(O)        \

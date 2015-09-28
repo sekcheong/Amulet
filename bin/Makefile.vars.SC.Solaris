@@ -1,0 +1,59 @@
+##
+##  This file sets the Amulet Makefile variables for Sun C++ on Solaris
+##  It has been used with Sun C++ 4.1 on SunOS lovelace 5.5.1 ...
+##
+##  Note: this makefile.vars file was contributed by Stuart Pook
+##  stuart@acm.org, an Amulet user.   The Amulet group has not tested
+##  it with Sun C++.  Please send any bug reports to
+##  amulet-bugs@cs.cmu.edu. 
+##
+
+CC = CC
+LD = ld
+
+##
+## Parameters for Amulet programs
+## 
+
+# X11 directories, uncomment and set if necessary
+# X11_INC = -I/usr/X11/X11R6/include
+# X11_LIB = -L /usr/X11/X11R6/lib
+
+# compiler flags for Amulet programs
+AM_CFLAGS = -I$(AMULET_DIR)/include -I/usr/openwin/share/include  -L/usr/openwin/lib -PIC -DNEED_BOOL -DMEMORY -DNEED_STRING 
+
+# libraries needed by Amulet (interactors needs math library)
+AM_LIBS = $(X11_LIB) -lX11 -lm 
+
+
+##
+## Parameters for the Amulet library
+## 
+
+# directory where Amulet will (eventually) be installed
+# defaults to its current location (AMULET_DIR)
+AMULET_ROOT=$(AMULET_DIR)
+
+# additional compiler flags for development version
+AM_DEVELOP = -O2 -DDEBUG -g
+
+# additional compiler flags for release version
+AM_RELEASE = -O2
+
+# additional compiler flags for optimized version with inspector and debugging enabled
+AM_INHOUSE = -DDEBUG -g
+
+# additional compiler flags for optimized version with inspector but no debugging symbols
+AM_NODEBUGSYM = -O2 -DDEBUG
+
+# extra link flags for library test programs
+AM_LIB_LDFLAGS =
+
+# Makefile identifying the gem files for this platform
+AM_GEM_SOURCE = Makefile.gem.X
+
+# Makefile that knows how to make the Amulet library for this platform
+AM_STATIC_LIB_MAKE = Makefile.lib.unix.static
+
+# Set of library variants for make libs
+AM_LIBS_TO_MAKE = all-libs

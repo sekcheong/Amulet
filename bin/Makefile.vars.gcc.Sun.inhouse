@@ -1,0 +1,8 @@
+include $(AMULET_DIR)/bin/Makefile.vars.gcc.Sun
+
+# override settings in Makefile.vars.gcc.Sun
+OP=$(AM_INHOUSE)
+LIB_MODIFIER=-inhouse
+AM_SHARED_LIB_MAKE = Makefile.lib.gcc.multi-shared
+AM_LIBS_TO_MAKE = inhouse all-libs
+AM_SAMPLE_FLAGS = $(AM_INHOUSE)

@@ -1,0 +1,90 @@
+#
+#  Build static libraries for Unix platforms using generic tools
+#
+#  Parameters (can be set in Makefile.vars.*):
+#	AR        standard archive program (usually ar)
+#	RANLIB	  random-access organizer (usually ranlib)
+#       LD	  linker (usually ld)
+#
+
+UTILS_LIB =  $(LIB_DIR)/libamutils$(LIB_MODIFIER).a
+GEM_LIB =    $(LIB_DIR)/libamgem$(LIB_MODIFIER).a
+ORE_LIB =    $(LIB_DIR)/libamobject$(LIB_MODIFIER).a
+AMULET_LIB = $(LIB_DIR)/libamulet$(LIB_MODIFIER).a
+
+UTILS_OBJ =  $(LIB_DIR)/amutils.o
+GEM_OBJ =    $(LIB_DIR)/amgem.o
+ORE_OBJ =    $(LIB_DIR)/amobject.o
+AMULET_OBJ = $(LIB_DIR)/amulet.o
+
+FULL_AMULET_DEPENDENCIES = $(AMULET_OBJ) $(GEM_OBJ) $(ORE_OBJ) $(UTILS_OBJ)
+FULL_ORE_DEPENDENCIES = $(ORE_OBJ) $(UTILS_OBJ)
+FULL_GEM_DEPENDENCIES = $(GEM_OBJ) $(UTILS_OBJ)
+FULL_UTILS_DEPENDENCIES = $(UTILS_OBJ)
+
+# Undefine these parameters, for example
+#	AMULET_LIB_DEPENDENCIES =
+# to keep from rebuilding the Amulet libraries after deleting the
+# Amulet object files 
+AMULET_LIB_DEPENDENCIES = $(FULL_AMULET_DEPENDENCIES)
+ORE_LIB_DEPENDENCIES = $(FULL_ORE_DEPENDENCIES)
+GEM_LIB_DEPENDENCIES = $(FULL_GEM_DEPENDENCIES)
+UTILS_LIB_DEPENDENCIES = $(FULL_UTILS_DEPENDENCIES)
+
+$(AMULET_LIB): $(AMULET_LIB_DEPENDENCIES)
+	$(AR) cr $(AMULET_LIB) $(FULL_AMULET_DEPENDENCIES)
+	-$(RANLIB) $(AMULET_LIB)
+#	$(RM) $(FULL_AMULET_DEPENDENCIES)
+
+$(ORE_LIB): $(ORE_LIB_DEPENDENCIES)
+	$(AR) cr $(ORE_LIB) $(FULL_ORE_DEPENDENCIES)
+	-$(RANLIB) $(ORE_LIB)
+#	$(RM) $(FULL_ORE_DEPENDENCIES)
+
+$(GEM_LIB): $(GEM_LIB_DEPENDENCIES)
+	$(AR) cr $(GEM_LIB) $(FULL_GEM_DEPENDENCIES)
+	-$(RANLIB) $(GEM_LIB)
+#	$(RM) $(FULL_GEM_DEPENDENCIES)
+
+$(UTILS_LIB): $(UTILS_LIB_DEPENDENCIES)
+	$(AR) cr $(UTILS_LIB) $(FULL_UTILS_DEPENDENCIES)
+	-$(RANLIB) $(UTILS_LIB)
+#	$(RM) $(FULL_UTILS_DEPENDENCIES)
+
+$(AMULET_OBJ): $(OPAL_MODULE) $(INTER_MODULE) $(DEBUG_MODULE) \
+	       $(WIDGETS_MODULE) $(GESTURE_MODULE) $(ANIM_MODULE)
+	$(LD) -r $(OPAL_MODULE) $(INTER_MODULE) $(DEBUG_MODULE) \
+		 $(WIDGETS_MODULE) $(GESTURE_MODULE) $(ANIM_MODULE) \
+		 -o $(AMULET_OBJ)
+
+$(ORE_OBJ): $(ORE_MODULE)
+	$(LD) -r $(ORE_MODULE) -o $(ORE_OBJ)
+
+$(GEM_OBJ): $(GEM_MODULE)
+	$(LD) -r $(GEM_MODULE) -o $(GEM_OBJ)
+
+$(UTILS_OBJ): $(UTILS_MODULE)
+	$(LD) -r $(UTILS_MODULE) -o $(UTILS_OBJ)
+
+
+# Use these declarations to compile tests against static libraries
+
+NEEDS_GEM = $(GEM_LIB)
+USES_GEM  = -L$(LIB_DIR) -lamgem$(LIB_MODIFIER)
+STATIC_GEM = $(NEEDS_GEM)
+
+NEEDS_ORE = $(ORE_LIB)
+USES_ORE  = -L$(LIB_DIR) -lamobject$(LIB_MODIFIER)
+STATIC_ORE = $(NEEDS_ORE)
+
+NEEDS_ALL = $(AMULET_LIB)
+USES_ALL  = -L$(LIB_DIR) -lamulet$(LIB_MODIFIER)
+STATIC_ALL = $(NEEDS_ALL)
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# Inference rule
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+.cc.o:
+	$(CC) $(CFLAGS) -c $< -o $@

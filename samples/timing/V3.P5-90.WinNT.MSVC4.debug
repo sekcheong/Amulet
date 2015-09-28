@@ -1,0 +1,114 @@
+Started, debugging is ON
+0. Time to Initialize = 8041 milliseconds
+1. Time to create objects from Root = 6449 milliseconds
+    for 5000 times = 1.2898 msec each, or 775.314 per sec
+2. Time to destroy objects from Root = 8823 milliseconds
+    for 5000 times = 1.7646 msec each, or 566.701 per sec
+3. Time to create objects from Root 2nd time = 6359 milliseconds
+    for 5000 times = 1.2718 msec each, or 786.287 per sec
+4. Time to destroy objects from Root 2nd time = 9214 milliseconds
+    for 5000 times = 1.8428 msec each, or 542.652 per sec
+5. Time to create objects from Am_Rectangle = 49381 milliseconds
+    for 5000 times = 9.8762 msec each, or 101.254 per sec
+6. Time to set a NEW slot in obj = 4426 milliseconds
+    for 5000 times = 0.8852 msec each, or 1129.69 per sec
+7. Time to set slot again diff objs = 140 milliseconds
+    for 5000 times = 0.028 msec each, or 35714.3 per sec
+8. Time to set MY_LEFT slot repeatedly in root = 1682 milliseconds
+    for 100000 times = 0.01682 msec each, or 59453 per sec
+9. Time to set Am_LEFT slot repeatedly in rect = 1953 milliseconds
+    for 100000 times = 0.01953 msec each, or 51203.3 per sec
+10. Time to get value as Am_Value = 60 milliseconds
+    for 5000 times = 0.012 msec each, or 83333.3 per sec
+11. Time to get value as int different objects = 60 milliseconds
+    for 5000 times = 0.012 msec each, or 83333.3 per sec
+12. Time to get value same rect as int = 791 milliseconds
+    for 100000 times = 0.00791 msec each, or 126422 per sec
+13. Time to get value as Am_Object = 621 milliseconds
+    for 100000 times = 0.00621 msec each, or 161031 per sec
+14. Time to set + get as int = 3385 milliseconds
+    for 100000 times = 0.03385 msec each, or 29542.1 per sec
+15. Time to install a constraint into MY_LEFT = 21892 milliseconds
+    for 5000 times = 4.3784 msec each, or 228.394 per sec
+16. Time to set NEW_SLOT, invalidating all constraints = 4627 milliseconds
+    for 5000 times = 0.9254 msec each, or 1080.61 per sec
+17. Time to one get which validates all constraints = 420 milliseconds
+    for 5000 times = 0.084 msec each, or 11904.8 per sec
+18. Time to set NEW_SLOT, get(MY_LEFT) from constraint = 15292 milliseconds
+    for 100000 times = 0.15292 msec each, or 6539.37 per sec
+19. Time to get value rect INHERITED one level = 91 milliseconds
+    for 5000 times = 0.0182 msec each, or 54945.1 per sec
+20. Time to get value rect inherited TWO levels = 110 milliseconds
+    for 5000 times = 0.022 msec each, or 45454.5 per sec
+21. Time to get method and call it = 981 milliseconds
+    for 100000 times = 0.00981 msec each, or 101937 per sec
+22. Time to create window and update = 111 milliseconds
+23. Time to update rect double-buffered = 18396 milliseconds
+    for 3000 times = 6.132 msec each, or 163.079 per sec
+24. Time to update button double-buffered = 45475 milliseconds
+    for 3000 times = 15.1583 msec each, or 65.9703 per sec
+25. Time to update triangle double-buffered = 22473 milliseconds
+    for 3000 times = 7.491 msec each, or 133.494 per sec
+26. Time to update rect NOT double-buffered = 6589 milliseconds
+    for 3000 times = 2.19633 msec each, or 455.304 per sec
+27. Time to update button NOT double-buffered = 20109 milliseconds
+    for 3000 times = 6.703 msec each, or 149.187 per sec
+28. Time to update triangle NOT double-buffered = 10665 milliseconds
+    for 3000 times = 3.555 msec each, or 281.294 per sec
+29. Time to destroy window containing polygon = 20 milliseconds
+30. Time to pretend DOWN+UP, no interactors = 1873 milliseconds
+    for 2000 times = 0.9365 msec each, or 1067.81 per sec
+31. Time to invoke one_shot_inter, no graphics = 5217 milliseconds
+    for 2000 times = 2.6085 msec each, or 383.362 per sec
+32. Time to invoke one_shot_inter, toggle color = 17895 milliseconds
+    for 2000 times = 8.9475 msec each, or 111.763 per sec
+33. Time to move_grow_inter = 15322 milliseconds
+    for 2000 times = 7.661 msec each, or 130.531 per sec
+34. Time to Add_Part rect to window = 5428 milliseconds
+    for 5000 times = 1.0856 msec each, or 921.15 per sec
+35. Time to Update Window with 5000 Rectangles = 15031 milliseconds
+36. Time to update rect over other rects = 32477 milliseconds
+    for 100 times = 324.77 msec each, or 3.0791 per sec
+37. Time to destroy objects while in window = 9173 milliseconds
+    for 50 times = 183.46 msec each, or 5.45078 per sec
+
+---------------------
+Summary (DEBUGGING on) (in msec for each):
+0.  8041 for Initialize
+1.  1.2898 for create objects from Root
+2.  1.7646 for destroy objects from Root
+3.  1.2718 for create objects from Root 2nd time
+4.  1.8428 for destroy objects from Root 2nd time
+5.  9.8762 for create objects from Am_Rectangle
+6.  0.8852 for set a NEW slot in obj
+7.  0.028 for set slot again diff objs
+8.  0.01682 for set MY_LEFT slot repeatedly in root
+9.  0.01953 for set Am_LEFT slot repeatedly in rect
+10.  0.012 for get value as Am_Value
+11.  0.012 for get value as int different objects
+12.  0.00791 for get value same rect as int
+13.  0.00621 for get value as Am_Object
+14.  0.03385 for set + get as int
+15.  4.3784 for install a constraint into MY_LEFT
+16.  0.9254 for set NEW_SLOT, invalidating all constraints
+17.  0.084 for one get which validates all constraints
+18.  0.15292 for set NEW_SLOT, get(MY_LEFT) from constraint
+19.  0.0182 for get value rect INHERITED one level
+20.  0.022 for get value rect inherited TWO levels
+21.  0.00981 for get method and call it
+22.  111 for create window and update
+23.  6.132 for update rect double-buffered
+24.  15.1583 for update button double-buffered
+25.  7.491 for update triangle double-buffered
+26.  2.19633 for update rect NOT double-buffered
+27.  6.703 for update button NOT double-buffered
+28.  3.555 for update triangle NOT double-buffered
+29.  20 for destroy window containing polygon
+30.  0.9365 for pretend DOWN+UP, no interactors
+31.  2.6085 for invoke one_shot_inter, no graphics
+32.  8.9475 for invoke one_shot_inter, toggle color
+33.  7.661 for move_grow_inter
+34.  1.0856 for Add_Part rect to window
+35.  15031 for Update Window with 5000 Rectangles
+36.  324.77 for update rect over other rects
+37.  183.46 for destroy objects while in window

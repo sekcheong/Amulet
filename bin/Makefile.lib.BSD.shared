@@ -1,0 +1,102 @@
+# Build shared libraries for NetBSD/FreeBSD/OpenBSD platforms
+# This procedure for making shared libraries is gcc-specific;
+# it creates shared libraries by relinking archive libraries
+#
+# This makefile was contributed by YU SONG (cs_yus@sal.lamar.edu) and
+# updated by the Amulet group.  The Amulet group has not tested it on
+# a NetBSD, FreeBSD or OpenBSD platform.  Please send any bug reports
+# to amulet-bugs@cs.cmu.edu.
+
+SHARED_CC=ld -Bshareable -Bforcearchive
+
+UTILS_lib=libamutils$(LIB_MODIFIER)
+GEM_lib=libamgem$(LIB_MODIFIER)
+ORE_lib=libamobject$(LIB_MODIFIER)
+AMULET_lib=libamulet$(LIB_MODIFIER)
+
+UTILS_LIB=$(LIB_DIR)/$(UTILS_lib).so
+GEM_LIB=$(LIB_DIR)/$(GEM_lib).so
+ORE_LIB=$(LIB_DIR)/$(ORE_lib).so
+AMULET_LIB=$(LIB_DIR)/$(AMULET_lib).so
+
+V=$(AM_MAJOR_VERSION).$(AM_MINOR_VERSION)
+
+UTILS_ARCHIVE_LIB=  $(LIB_DIR)/$(UTILS_lib)_pic.a
+GEM_ARCHIVE_LIB=    $(LIB_DIR)/$(GEM_lib)_pic.a
+ORE_ARCHIVE_LIB=    $(LIB_DIR)/$(ORE_lib)_pic.a
+AMULET_ARCHIVE_LIB= $(LIB_DIR)/$(AMULET_lib)_pic.a
+
+BAD_VERSION=gcc version 2\.[56]\.[0-9]
+
+check_gcc_version:
+	@if { gcc -v 2>&1 | grep 'gcc version $(BAD_VERSION)' > /dev/null ; } then \
+{ echo "*** Amulet shared libraries not supported on gcc versions before 2.7.0." ; \
+echo '*** Either remove "AM_SHARED_LIB_MAKE=Makefile.lib.gcc.shared" from $(AMULET_VARS_FILE),' ; \
+echo "*** or upgrade to gcc 2.7.0 or later." ; \
+echo "" ; false ; \
+} fi
+
+FULL_AMULET_DEPENDENCIES = \
+    $(OPAL_MODULE) $(INTER_MODULE) $(DEBUG_MODULE)   \
+    $(WIDGETS_MODULE) $(GESTURE_MODULE) $(ANIM_MODULE) \
+    $(GEM_MODULE) $(ORE_MODULE) $(UTILS_MODULE)
+FULL_ORE_DEPENDENCIES = $(ORE_MODULE) $(UTILS_MODULE)
+FULL_GEM_DEPENDENCIES = $(GEM_MODULE) $(UTILS_MODULE)
+FULL_UTILS_DEPENDENCIES = $(UTILS_MODULE)
+
+# Undefine these parameters, for example
+#	AMULET_LIB_DEPENDENCIES =
+# to keep from rebuilding the Amulet libraries after deleting the
+# Amulet object files 
+AMULET_LIB_DEPENDENCIES = $(FULL_AMULET_DEPENDENCIES)
+ORE_LIB_DEPENDENCIES = $(FULL_ORE_DEPENDENCIES)
+GEM_LIB_DEPENDENCIES = $(FULL_GEM_DEPENDENCIES)
+UTILS_LIB_DEPENDENCIES = $(FULL_UTILS_DEPENDENCIES)
+
+$(AMULET_LIB):: check_gcc_version
+$(AMULET_LIB):: $(AMULET_LIB_DEPENDENCIES)
+	-rm -f $(AMULET_ARCHIVE_LIB)
+	ar -cq  $(AMULET_ARCHIVE_LIB) $(FULL_AMULET_DEPENDENCIES)
+	ranlib $(AMULET_ARCHIVE_LIB)
+	$(SHARED_CC) -o $(AMULET_LIB) $(AMULET_ARCHIVE_LIB)
+
+$(GEM_LIB): $(GEM_LIB_DEPENDENCIES)
+	-rm -f $(GEM_ARCHIVE_LIB)
+	ar -cq $(GEM_ARCHIVE_LIB) $(FULL_GEM_DEPENDENCIES)
+	ranlib $(GEM_ARCHIVE_LIB)
+	$(SHARED_CC) -o $(GEM_LIB) $(GEM_ARCHIVE_LIB)
+
+$(ORE_LIB): $(ORE_LIB_DEPENDENCIES)
+	-rm -f $(ORE_ARCHIVE_LIB)
+	ar -cq $(ORE_ARCHIVE_LIB) $(FULL_ORE_DEPENDENCIES)
+	ranlib $(ORE_ARCHIVE_LIB)
+	$(SHARED_CC) -o $(ORE_LIB) $(ORE_ARCHIVE_LIB)
+
+$(UTILS_LIB): $(UTILS_LIB_DEPENDENCIES)
+	-rm -f $(UITLS_ARCHIVE_LIB)
+	ar -cq $(UTILS_ARCHIVE_LIB) $(FULL_UTILS_DEPENDENCIES)
+	ranlib $(UTILS_ARCHIVE_LIB)
+	$(SHARED_CC) -o $(UTILS_LIB) $(UTILS_ARCHIVE_LIB)
+
+
+# Use these declarations to compile tests against monolithic shared libs.
+
+NEEDS_GEM = $(AMULET_LIB)
+USES_GEM  = -L$(LIB_DIR) -lamulet$(LIB_MODIFIER)
+STATIC_GEM =
+
+NEEDS_ORE = $(AMULET_LIB)
+USES_ORE  = -L$(LIB_DIR) -lamulet$(LIB_MODIFIER)
+STATIC_ORE =
+
+NEEDS_ALL = $(AMULET_LIB)
+USES_ALL  = -L$(LIB_DIR) -lamulet$(LIB_MODIFIER)
+STATIC_ALL =
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# Inference rules
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+.cc.o:
+	$(CC) $(CFLAGS) -c $< -o $@

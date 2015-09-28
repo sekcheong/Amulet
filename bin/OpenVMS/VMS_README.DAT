@@ -1,0 +1,50 @@
+These instructions were originally written and contributed by David
+Mathog, Biology Division, Caltech.  They represent the steps he uses
+to build Amulet V3 under OpenVMS.  If you are going to build the shareable
+library (HIGHLY RECOMMENDED!) you should also have the SYMBOLS program
+installed, which you can obtain from
+
+    ftp://ftp.wku.edu/vms/fileserv/SYMBOLS.ZIP
+
+If you don't have SYMBOLS then you can use the supplied .OPT files, but any
+changes that may have snuck into Amulet could break them! 
+
+These instructions have not been tested by the Amulet group.  Report
+any problems or suggestions to amulet-bugs@cs.cmu.edu.
+
+				- * -
+
+Here are OpenVMS instructions for anybody who wants to build 3.0.  This
+worked with Amulet 3.0B on OpenVMS 6.2 with DEC CXX 5.4.  This will
+not work with DEC CXX 5.2 since it lacks the crucial CXXLINK utility.
+
+1. Put MAKE_VMS.COM (or MAKE_VMS_SHARED.COM) into the [.bin] subdirectory.
+   If you are making the shared version, and 
+     1.  you HAVE SYMBOLS,  also put  MAKE_OPT_FROM_OLB.COM into [.bin]
+     2.  you DON'T HAVE SYMBOLS, put the two *.OPT files into the [.lib]
+         directory and edit MAKE_VMS_SHARED.COM so that @MAKE_OPT_FROM_OLB
+         isn't executed.
+
+   Edit the definitions of amulet, amulet_lib and amulet_dir as
+   appropriate for your installation
+
+2. Build the Amulet library, test programs and samples with:
+
+       $ @make_vms
+
+   or
+
+       $ @make_vms_shared
+
+   You should see no errors or warnings.
+
+3. Before running any of the test programs define amulet_dir as
+   appropriate for your installation, eg.
+
+       $ define amulet_dir "/prgdisk/shared/programs/amulet/amulet"
+
+   This logical name is needed to let amulet find it's [.lib] information.
+   Obviously it is system dependent.
+
+4. Run the test programs, either by defining foreign symbols or via RUN.
+   Better have DECW$DISPLAY configured first!!!

@@ -1,0 +1,7 @@
+!include $(AMULET_DIR)/bin/Makefile.vars.MSVC5.Win32
+
+# override settings in Makefile.vars.MSVC.Win32
+OP=$(AM_INHOUSE)
+LIB_MODIFIER=-inhouse
+AM_LIBS_TO_MAKE = inhouse-static develop-static release-static
+AM_SAMPLE_FLAGS = $(AM_INHOUSE)

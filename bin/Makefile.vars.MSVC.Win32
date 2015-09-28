@@ -1,0 +1,70 @@
+##
+##  This file sets the Amulet Makefile variables for
+##  MSVC (version 2 and up) on Windows NT/95
+##
+
+CC = cl
+LD = link
+
+
+##
+## Parameters for Amulet programs
+## 
+
+# compiler flags for Amulet programs
+AM_CFLAGS = -I$(AMULET_DIR)/include -nologo -D_WIN32 -D_WINDOWS \
+	    -DNEED_BOOL -DMEMORY
+
+# libraries needed by Amulet
+AM_LIBS = kernel32.lib user32.lib gdi32.lib winmm.lib
+
+
+##
+## Parameters for the Amulet library
+## 
+
+# directory where Amulet will (eventually) be installed
+# defaults to its current location (AMULET_DIR)
+AMULET_ROOT=$(AMULET_DIR)
+
+# additional compiler flags for development version
+AM_DEVELOP = -O2 -DDEBUG -Zi
+
+# additional compiler flags for release version
+AM_RELEASE = -O2
+
+# additional compiler flags for optimized version with inspector and debugging enabled
+AM_INHOUSE = -DDEBUG -Zi
+
+# additional compiler flags for optimized version with inspector but no debugging symbols
+AM_NODEBUGSYM = -O2 -DDEBUG
+
+# extra link flags for library test programs
+AM_LIB_LDFLAGS = -INCREMENTAL:NO
+
+# Makefile identifying the gem files for this platform
+AM_GEM_SOURCE = Makefile.gem.Win32
+
+# Makefile that knows how to make the Amulet library for this platform
+AM_STATIC_LIB_MAKE = Makefile.lib.MSVC.static
+
+# Set of library variants for make libs
+AM_LIBS_TO_MAKE = develop-static release-static
+
+# other flags for this platform
+AM_OBJ_SUFFIX=.obj
+AM_EXE_SUFFIX=.exe
+AM_EXE_OUT=/out:
+AM_OBJ_OUT=/Fo
+AM_SRC_IN=/Tp
+ANY_LIBRARY=$(LIB_DIR)/*.lib $(LIB_DIR)/*.dll
+ANY_TEST_PROGRAM=$(BIN_DIR)/test*.exe $(BIN_DIR)/*.pdb $(BIN_DIR)/*.ilk \
+		 $(BIN_DIR)/agate.exe $(BIN_DIR)/av.exe $(BIN_DIR)/checkers.exe \
+		 $(BIN_DIR)/circuit.exe $(BIN_DIR)/color.exe $(BIN_DIR)/hsv.exe \
+		 $(BIN_DIR)/hello.exe $(BIN_DIR)/goodbye_inter.exe \
+		 $(BIN_DIR)/goodbye_button.exe $(BIN_DIR)/map.exe \
+		 $(BIN_DIR)/space.exe $(BIN_DIR)/space2.exe $(BIN_DIR)/timing.exe \
+		 $(BIN_DIR)/tutorial.exe $(BIN_DIR)/tree.exe
+
+# override definition to build samples and tests without debugging symbols
+AM_SAMPLE_FLAGS = $(AM_NODEBUGSYM)

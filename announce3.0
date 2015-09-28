@@ -1,0 +1,1690 @@
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+-*-*-*-        Announcing The Release Of Version 3.0 of Amulet        -*-*-*-
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+We are delighted to announce the official release of Amulet Version
+3.0.  We have fixed several bugs found in the V3.0beta code and
+documentation, and have ported the system to new releases of the
+Microsoft Visual C++ and CodeWarrior Pro.  There are LOTS of new
+features since V2.0.
+
+In Amulet V3, we have made significant changes to the slot interface
+that are designed to help users avoid common programming mistakes.
+This means that code written for Amulet V2 is unlikely to work without
+changes in Amulet V3.  In particular, you must now use Set() to change
+the value of a slot that is already present in an object and you must
+use Add() to put a value in a new slot.  See Section 2.1 for details.
+
+The preprocessor symbol, AMULET2_CONVERSION, was defined by default in
+the compiler options used to build the Amulet V3 Beta libraries.  The
+symbol causes misuses of Add versus Set to be reported as run-time
+warnings instead of errors; it also makes the code run a lot slower.
+For the official Amulet V3 release, we no longer define
+AMULET2_CONVERSION by default.  If you are just now converting from
+Amulet V2 for the first time, you may want to add -DAMULET2_CONVERSION
+to the compilation switches defined in your Makefile.vars file.  If
+you are a new Amulet user, this does not affect you.  For more details
+see Section 2 below.
+
+We support Amulet on Unix with gcc v2.7.2 and 2.7.2.1 on Suns and HPs,
+and with Centerline's ObjectCenter Version 2.1, using either X11/R5 or
+X11/R6.  On the PC, we support Visual C++ V4.0, V4.2 and V5.0 under
+Windows NT (3.5.1 and 4.0) and Windows 95.  On the Macintosh, we
+support both M68000 and PowerPC processors with CodeWarrior v10 and
+CodeWarrior Pro 1 (CodeWarrior 12).  Many people have also succeeded in
+using Amulet V3 on other platforms as well, notably Linux.
+
+This document is the complete change discussion that describes all the
+changes since V2.0.
+
+Primarily, we have added:
+
+	* Animation using the novel and easy to use animation constraints.
+	* An interface builder for laying out widgets interactively.
+	* Multiple looks and feels that mimic Motif, Windows 95 and Macintosh.
+	* A mechanism to save and load Amulet objects to files.
+	* "Wrappers" for external types so it is easier to put them
+	  into Amulet objects with full type checking, printing and editing.
+
+Amulet users will need to edit their V2 code to use this new version, but
+we think you will find it worthwhile.  A section below contains an
+extensive discussion of the changes you will need to make.
+
+To get the new version, see 
+	http://www.cs.cmu.edu/~amulet/amulet3-release.html
+
+We are happy to announce that the new documentation is also ready for
+V3.  You can get it from the same place as the source files:
+	http://www.cs.cmu.edu/~amulet/amulet3-release.html#documentation
+
+The V3 manual does not document the changes between V2 and V3.  For
+that, you can see below.  This file is also available as:
+	http://www.cs.cmu.edu/afs/cs/project/amulet/amulet3/announce3.0
+
+
+The rest of this file contains:
+
+0. Changes Since Amulet V3.0alpha
+  0.0 Changes Since V3.0beta
+  0.1 Changes Between V3.0alpha2 and V3.0beta
+  0.2 Changes Between V3.0alpha and V3.0alpha2
+1. Changes Between Amulet V2.1 and Amulet V3.0alpha
+  1.1 Major Changes
+  1.2 Minor Changes
+  1.3 Very Minor Changes
+  1.4 Bug Fixes
+2. Description of Non-Backwards Compatible Changes
+  2.1 Get/Set/GV/Get_Part changes
+  2.2 Am_Custom_Gridding_Method
+  2.3 Enums are now 1st class types
+  2.4 Renamed Print_Name() to be Print() everywhere.
+  2.5 Multi_Constraint
+  2.6 Slot Name Changes
+  2.7 Image Files Moved
+3. Quick Guide to New Features
+  3.1 Animations
+  3.2 Gilt
+  3.3 Pointer_Wrappers and Enum_Wrappers
+  3.4 Drag-and-drop
+  3.5 Save and Load
+  3.6 Print(), Println(), To_String(), From_String()
+  3.7 New Look and Feels
+4. How to Make Amulet V3.
+  4.1 Amulet V3 For Unix
+  4.2 Amulet V3 For the PC
+  4.3 Amulet V3 For the Macintosh
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+ 
+0. Changes Since Amulet V3.0alpha
+==============================================
+
+0.0 Changes Since V3.0beta
+-------------------------------------------
+
+* Ported Amulet to MSVC++ 5.0 and CodeWarrior 12.  In order to
+  accomplish the latter, added conditional support for new osstrstream
+  interface.  In particular, CodeWarrior 12 removed the standard
+  definition of strstream, so we added new macros, so you can use the
+  following code with all compilers:
+	  #include STR_STREAM__H
+
+	  char line[300];
+	  OSTRSTREAM_CONSTR (oss,line, 300, ios::out);
+   	  reset_ostrstream(oss);
+	  oss << value << ends;
+	  OSTRSTREAM_COPY(oss, line, 300);
+	  do something with line
+
+* We have turned OFF the AMULET2_CONVERSION switch in the Makefiles.
+  If you are converting an application from V2, you may add this
+  switch to AM_CFLAGS in the Makefile.vars.<compiler>.<platform> file
+  to change Add/Set errors into warnings.  Using the switch is
+  expensive so we recommend removing it, deleting object files and
+  libraries, and rebuilding after you have changed your application.
+
+* On Unix and the PC, Amulet now uses the Am_TITLE string for a
+  window's icon title when the Am_ICON_TITLE slot has the value
+  Am_No_Value.  And the default value for the Am_ICON_TITLE slot is
+  now Am_No_Value. 
+
+* You can now change the cursor in a window by setting the Am_CURSOR
+  slot of an Am_Window with an Am_Cursor object.  This is not yet
+  implemented on the Macintosh.
+
+* We have found and fixed some (but not all) memory leaks.
+
+* We have fixed some (but not all) discrepencies in Windows draw
+  functions.  Added mask methods to many draw functions.
+
+* We have fixed the inspector menu bug, which prevented the inspector
+  from recognizing certain menu items on certain platform.
+
+* We have fixed window position bug.  Menus now pop up in the correct
+  place when their owner window is moved, even when the window is
+  moved while it is invisible. 
+
+* We have fixed some discrepencies in the manual, and added more index
+  items.
+
+* We now use a well-formed default font name to look up a font under
+  X-windows, if no font is returned when we use a
+  less-than-well-formed name.  (Some platforms return a better font
+  when the less-than-well-formed name is used.)
+
+* Fixed parsing of PAGE_UP and PAGE_DOWN key symbols.
+
+* Poping up a menu on the PC no longer deactivates the application
+  window.
+
+* For MS-Windows, we have incorporated changes to console.cpp contributed
+  by Robert M. Muench.  The change fixes a memory leak, and allows
+  users to write to a log file.
+
+0.1 Changes Between V3.0alpha2 and V3.0beta
+-------------------------------------------
+* Added the documentation!
+
+* We have enabled warnings about misuse of Add and Set.  See Section
+  2.1 below
+
+* We have rationalized the compiler options used to produce the Amulet
+  libraries.  The default library "amulet" is compiled for application
+  development with optimization on, with debugging symbols defined, and
+  with the Amulet inspector enabled.  The release library
+  "amulet-release" is compiled for application release with optimization
+  on, without debugging symbols, and without the inspector enabled.
+
+* On the Macintosh, we have offset the default Am_TOP and Am_LEFT
+  values of the Am_Window object so windows are not hidden by the Menu Bar.
+
+* On the Macintosh, we have renamed types.h to be amulet/types.h to
+  avoid conflicts with the Codewarrior include file of the same name.
+
+* The slot Am_UNDO_HANDLER is now a default slot in the Am_Window
+  object.  (So you must use Set() not Add() to change its value.)
+
+* Contributed Makefile.vars... and Makefile.lib... files have been
+  moved from amulet/contrib to amulet/bin.
+
+* In addition to the growing set of platforms in use by Amulet users,
+  Amulet users have been able to compile Amulet V3 using the
+  native Sun compiler SC 3.0.1 and 4.0 (C++ 4.1); using gcc under
+  digital unix and NetBSD, and using MSVC++ 5.0.  There are
+  contributed Makefile.vars... and Makefile.lib... files in
+  amulet/bin. 
+
+* See amulet/contrib/listbox for a new listbox widget contributed by
+  an Amulet user.
+
+* Changed the name of Am_H_FRAME and Am_V_FRAME slots to be
+  Am_RIGHT_OFFSET and Am_BOTTOM_OFFSET.
+
+* Fixed formulas Am_Vertical_Layout and Am_Horizontal_Layout so they no
+  longer use Am_X_OFFSET and Am_Y_OFFSET slots, but instead use
+  Am_LEFT_OFFSET and Am_TOP_OFFSET like the other formulas, due to a
+  conflict with scrolling groups.
+
+* We have rationalized the CodeWarrior 10 projects for the Macintosh
+  so they permit straightforward integration with other libraries; and
+  we have resized the projects to fully accommodate the memory
+  requirements of the sample applications.
+
+* Lots of small bug fixes (Gilt align-down, option buttons in modal
+  windows, interactors running continuously, etc.)
+
+0.2 Changes Between V3.0alpha and V3.0alpha2
+--------------------------------------------
+
+NEW FEATURES:
+-------------
+
+* This version works on the Macintosh.  See the installation
+  instructions below. 
+
+* Amulet now supports Japanese character input and output (with some
+  limitations) under UNIX/X11 using two-byte JIS (ISO) or EUC encodings
+  and under Windows-J 95/NT using the multi-byte SHIFT-JIS encoding.
+  (Windows-J is the Japanese version of Windows.)  Japanese input is not
+  fully supported under X11 -- so far only Roman-Kana conversion is
+  implemented.  There is currently no support for Japanese I/O on the
+  Macintosh; please let us know if you want to help us get this working.
+
+  The font Am_Japanese_Font is exported from opal.h; other sizes, faces
+  and families are available.  See amulet/src/opal/testJIO.cc for examples. 
+
+* Added Am_Pop_Up_Error_Window(str) function to widgets.h
+
+* New feature: Am_CHECKED_ITEM slot of a command object can be set,
+  and then that item in an Am_Menu_Bar or Am_Menu will show up
+  with a checkmark.
+
+* The Am_Slot_Key variables Am_SCROLLING_GROUP and Am_UNDO_DIALOG_BOX
+  have been renamed to Am_SCROLLING_GROUP_SLOT and Am_UNDO_DIALOG_BOX_SLOT,
+  to avoid linker name space conflicts under VMS.
+
+* Amulet users have successfully built Amulet V3 alpha under Linux
+  using gcc, on QNX/X-windows using Watcom 10.6, and under OpenVMS
+  using the DEC compiler.  There are new and revised contributed
+  Makefiles.vars files for Linux and QNX/X-Windows as well as
+  contributed command for building under OpenVMS.
+
+* See amulet/contrib/outline for a new outline widget (that looks like
+  a MS tree control) contributed by an Amulet user.
+
+* The Undo_Dialog_Box is now part of the Amulet library, so it is no
+  longer necessary to explicitly include <undo_dialog.h> or link in
+  undo_dialog_box.cc.
+
+BUG FIXES:
+----------
+
+* We fixed the problem where Amulet would not compile with DEBUG off
+  because some symbols were missing. 
+
+* Transparent gifs now display under Windows95.
+
+* Made property setting in Gilt undoable
+
+* Using Am_Start_Interactor will now work right after the interactor
+  has been created, so you can use this to create an interactor that is
+  always running.
+
+* Some cleanup/destruction-time bugs have been fixed so Amulet doesn't
+  crash when quitting.
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+1. Changes Between Amulet V2.1 and Amulet V3.0alpha
+==============================================
+
+1.1 Major Changes
+-----------------
+* Any property of an object can be easily animated by attaching an
+"animation constraint" to it.  See below for a description of how to
+do this.  Amulet's animation constraints were described in the conference
+paper: Brad A. Myers, Robert C. Miller, Rich McDaniel, and Alan Ferrency,
+"Easily Adding Animations to Interfaces Using Constraints."
+ACM Symposium on User Interface Software and Technology, UIST'96,
+November 6-8, 1996.  Seattle, WA. pp. 119-128.
+ftp://a.gp.cs.cmu.edu/afs/cs.cmu.edu/project/amulet/www/papers/animate.ps
+
+* Added the Gilt interface builder which allows windows, groups, and
+dialog boxes to be designed interactively, and which generates C++
+code for inclusion in applications.
+
+* Widgets now change their look to match Motif, Windows 95 or the
+Macintosh.  See below for details.
+
+* Standard mechanisms for saving Amulet objects to a file and loading
+them back which can be used by all applications.
+
+* Application-specific types are easier to put into Amulet objects
+with full type checking, custom printing and custom reading, using
+Pointer_Wrappers for pointers and Type_Wrappers for types which fit
+into a word (like Enumerated types, Am_Input_Chars, bit masks, etc.)
+The Inspector can allow full printing and editing of these.
+
+* The syntax and semantics of Get and Set and friends have been
+significantly changed to be more consistent and provide more
+capabilities.  GV has been eliminated--just use Get instead.  See
+below for details.
+
+* Enhanced debugging: more types of values print out correctly in the
+Inspector, and can be edited.  Usually when Am_Error's occur, the
+programmer is asked whether to go into the inspector or not, and the
+system has been engineered so the Inspector can be used even when
+parts of the system are messed up.
+
+1.2 Minor Changes
+-----------------
+
+* Turned on Amulet's MEMORY switch on PCs and Macintoshes, which makes
+initialization and exectution much faster. 
+
+* All objects in Amulet have methods for Printing and getting their
+name as a string, which are designed to be used when debugging.
+
+* New widgets and graphical objects:
+	- Am_Vertical_Up_Down_Counter widget
+	- Am_Number_Input_Widget: a text input widget for numbers.
+	  Numbers can be restricted to be in a range.  See
+	  samples/examples/example2.cc for how to use.
+	- Am_Password_Input_Widget: a text input widget that hides the
+	  characters typed.  Works just like the Am_Text_Input_Widget.
+	- Am_Arrow_Line: lines with an arrowhead.  Head size
+	  controlled by slots Am_HEAD_WIDTH (default=3) and Am_HEAD_LENGTH (5)
+	- New widget for pop-up menus.  The new Am_Pop_Up_Menu_Interactor is a
+	  one shot interactor that pops up a menu.  In addition to
+	  regular Am_One_Shot_Interactor slots, also has
+	  Am_FILL_STYLE, Am_ITEMS, and Am_WIDGET_LOOK which affect the
+	  sub-menu.  Command in inter is called if item doesn't have
+	  a command.  Am_VALUE of inter is set with selection from menu.
+	- Am_Fade_Group: objects in this group can be faded out by
+          setting the Am_VALUE of the group to be 0..99.  Uses a
+	  halftoning trick.
+	- Am_Flip_Book_Group: chooses ONE of the parts to show.  Use the
+	  regular Add_Part method to add parts to a flip book.  The Am_VALUE
+	  slot of the flip_book_group itself determines which one part will be
+	  displayed.  To display different parts, set the flip_book's Am_VALUE
+	  to the desired part's index (which starts from zero).
+
+* Some additional command objects:
+	- Am_Open_Command, Am_Save_Command, Am_Save_As_Command: use
+	    the built-in load-save mechanism (see below).
+	- Am_Standard_OK_Command, Am_Standard_Cancel_Command: useful
+	    for putting into custom dialog boxes.
+	- Am_About_Amulet_Command - brings up the About Amulet dialog box
+	- Am_Cycle_Value_Command - Provide a list of labels in the
+	    Am_LABEL_LIST slot, and it goes through the list with each click.
+	    The Am_VALUE of the command is set with the index of the
+	    current label in the list (from 0).  If the list has 2 values,
+	    then this will be a toggle, like "Turn Grid On" <-> "Turn Grid Off"
+	    with the Am_VALUE taking on 0 and 1.  Undoing returns the
+	    Am_VALUE and label to the original values.  You can also
+	    explicitly set the Am_VALUE slot of the command to change
+	    the current state.  Typically, a constraint would depend
+	    on the Am_VALUE of the command.
+	    BUG: The Am_VALUE slot takes on a string value temporarily
+	    before settling down with the correct value, so constraints must
+  	    be written to deal with this.
+	- Am_Gesture_Select_And_Do_Command, Am_Gesture_Create_Command,
+	  Am_Gesture_Unrecognized_Command: New commands in gestures
+	    that do the often-needed operations:
+
+* Added some additional built-in constraints, and made many of the
+  existing constraints take offset parameters, so you more frequently
+  can use built-in constraints rather than writing your own:
+	- Am_Fill_To_Bottom - uses object's slot Am_V_FRAME as the border
+	- Am_Fill_To_Right -  uses object's slot Am_H_FRAME as the border
+	- Am_Fill_To_Rest_Of_Width - Am_H_SPACING between the left
+	  side of this obj and the rest of the objects in the owner, leaving
+	  Am_H_FRAME on the right
+	- Am_Fill_To_Rest_Of_Height - same, but for height
+	- Am_Width_Of_Parts - now leaves Am_H_FRAME border all around
+	- Am_Height_Of_Parts - now leaves Am_V_FRAME border all around
+	- Am_Right_Is_Right_Of_Owner - leaves Am_H_FRAME
+	- Am_Bottom_Is_Bottom_Of_Owner - leaves Am_V_FRAME
+	- Am_Fill_To_Right_Of_Owner - leaves Am_H_FRAME
+	- Am_Fill_To_Bottom_Of_Owner - leaves Am_V_FRAME
+The following now take an optional offset and multiplier parameters,
+and compute (value*multiplier + offset).  Default for multiplier is
+1.0 and 0 for offset.
+	- Am_Same_As (key, offset, multiplier)
+	- Am_From_Owner (key, offset, multiplier)
+	- Am_From_Part (part, key, offset, multiplier) - gets the key
+	  slot from part
+	- Am_From_Sibling (sibling, key, offset, multiplier) - gets the key
+	  slot from sibling
+	- Am_From_Object (object, key, offset, multiplier) - given an
+	  object, get its key slot.  Useful when object is a global variable.
+The following built-in constraints have not been changed:
+  Am_Center_X_Is_Center_Of, Am_Center_Y_Is_Center_Of,
+  Am_Center_X_Is_Center_Of_Owner, Am_Center_Y_Is_Center_Of_Owner,
+
+* Am_TEXT_CHECK_LEGAL_METHOD for Am_Text_Input_Widget and
+  Am_Text_Interactors. Method defined in inter.h.
+
+* Am_Selection_Widget now handles multiple windows and drag-and-drop
+  of objects among windows.  See below for details.
+
+* New sample programs, such as Space2, Circuit, tree, and examples*.cc to
+  demonstrate features and help developers understand how to use Amulet.
+
+* We reorganized the samples/ subdirectory so that a number of the
+  programs no longer have sub-subdirectories.  Make all the samples in
+  the top-level bin/ directory instead of in the samples directory.  Also, the
+  hello world and goodbye world programs moved from samples/hello to
+  samples/examples.
+
+* Can get to characters at the top of a font by holding down the meta
+  key when entering a string. For example, under Unix, European
+  characters are accessible this way: the meta key basically sets the
+  8th bit before sending the character to the font.
+
+* Added ability to recognize and display transparent GIFS.
+
+* Added support for selecting in a region to selection handles.  The slot 
+Am_REGION_WHERE_TEST can be set to a method of type Am_In_Region_Method to
+determine which objects should be selected, but the default method,
+Am_Group_Parts_Inside, is probably adequate for most applications.
+
+* New events that can be used in Interactors as the START_WHEN are
+<button>_CLICK and <button>_DRAG (instead of "_DOWN"), e.g., "MIDDLE_CLICK".  
+CLICK triggers on the down, but doesn't happen until the up, and then
+only if you don't move more than Am_Minimum_Move_For_Drag pixels
+(default = 3).  _DRAG triggers after a DOWN and after you move
+Am_Minimum_Move_For_Drag pixels.  It is fine (and common) to have two
+interactors on the same start_where, one with _DRAG and one with
+_CLICK, and only one will run.  The rest of the interactor parameters
+operate normally.  This is now used by the selection handles, and are
+also available for user code.
+
+* The Amulet make files were re-organized, and now Amulet uses the
+same Makefile on the PC with Visual C++ as on Unix.  This means that
+compiling Amulet on the PC is now done differently.  See below.
+
+
+1.3 Very Minor Changes
+----------------------
+
+* value.Exists() is a new method that checks whether the value is
+legal.  Remember that value.Valid() checks that it is legal AND
+non-zero.  Values 0 and false return true for Exists() but false for Valid().
+
+* New slot Am_SET_SELECTED of choice and one-shot interactors that if
+set with false, will prevent the setting of the Am_SELECTED and
+Am_INTERIM_SELECTED slots.
+
+* New functions for dealing with time in gdefs.h.
+
+* The built-in dialog box routines are more robust, efficient, and
+useful.  The default position for dialog boxes now
+Am_AT_CENTER_SCREEN.  Additional dialog boxes (which for now are
+mainly place-holders): Am_Show_File_Dialog_For_Read,
+Am_Show_File_Dialog_For_Write
+
+* Made text in widgets be white if the background is dark.
+
+* Am_DRAW_MONOCHROME slot controls whether bitmaps are drawn with
+their specified colors, or the color in the line style and fill style
+slots.  This is not yet implemented on the Macintosh.
+
+* Am_Style::Clone_With_New_Color method
+
+* Am_Font::Get to get the properties of the font.
+
+* A new macro in widgets.h: Am_POP_UP_ERROR_WINDOW which takes
+something that can be passed to cout, like:
+   Am_POP_UP_ERROR_WINDOW("Accelerator " << i << " already in use by " << cmd);
+Writes this to a string, and pops up an error message dialog box about it.
+Be sure to #include <strstream.h> to use this function. 
+
+* Buttons are shown as the default if the Am_DEFAULT slot of the
+command is set, to show which button will be operated when RETURN is hit in
+the window.  Note: you have to make the accelerator of the command be
+RETURN. (This is already done for Am_Standard_OK_Command).
+
+* Added new methods to Am_Inter_Locations to make them more
+useful. See inter.h for the methods.
+
+* The value in the Am_COMMAND or the Am_LABEL of the command, if not a string
+or an object, will be converted into a string and used (by printing it as an
+Am_Value) for most widgets.  In that case, the Am_VALUE of the widget will be
+the actual value of the slot (e.g. a number), not the string of the value.
+
+* Better gesture recognizer for dot gestures.  If you use a dot as a
+gesture, it would be a good idea to read your gestures into Agate, and
+write them out again as a new file.  However, the V3 gesture reader
+will still read V2 gesture classifier files.
+
+* Made so fully saturated colors (like red or blue) can be used in a
+widget and the highlight color will still show up.
+
+* The Inspector displays the slot's memory address in slot properties window
+(might be useful for debugging).
+
+* No size box is attached to a window if max_width == min_width and
+	max_height == min_height (Mac-only)
+
+* Extended the types of values that can be put into the event slots for when
+an Interactor will start, stop and abort.  The Am_START_WHEN, Am_ABORT_WHEN,
+and Am_STOP_WHEN slots can now be:
+	- a string or Am_Input_Char as before,
+	- a method of type Am_Event_Method, which will be called on
+	  each input event, or
+	- an Am_Value_Lists of strings, Am_Input_Chars, or
+	  Am_Event_Methods, in which case the Interactor will start when
+	  any of these match.
+
+* The new method Copy_Value_Only of objects turns all constraints into
+  constant values (and *does* copy Am_LOCAL slots).
+
+* Copy takes an optional name parameter like Create.
+
+* Can set the Am_SELECTION_WIDGET slot of the menu bar widget, and then no
+  longer need to set this slot of each editing command (like
+  Am_Graphics_Cut_Command).  This makes the specification of menubars much
+  smaller.
+
+* Am_Selection_Widgets can take the gridding parameters to affect
+  move/grow.
+
+* New function Am_Check_Accelerator_Char_For_Window to see if an
+  accelerator is defined.
+
+* Am_Share_Accelerators added to widget.h for menubars so the commands can be
+  made to work in other windows of the application.
+
+* All operations can be selectively enabled and disabled for specific
+  objects:
+	Add a part to an object called Am_INACTIVE_COMMANDS which is an
+	instance of Am_COMMAND.  Slots in that object can be true to
+	disable various operations.  Available slots are:
+  Am_MOVE_INACTIVE, Am_GROW_INACTIVE, Am_SELECT_INACTIVE,
+  Am_TEXT_EDIT_INACTIVE,
+  Am_SET_PROPERTY_INACTIVE, Am_CLEAR_INACTIVE,
+  Am_COPY_INACTIVE, Am_CUT_INACTIVE, Am_DUPLICATE_INACTIVE,
+  Am_TO_TOP_INACTIVE, Am_TO_BOTTOM_INACTIVE,
+  Am_GROUP_INACTIVE, Am_UNGROUP_INACTIVE,
+   The standard interactors and editing commands look for the appropriate
+   slot of the object, if the command or interactor's
+   Am_CHECK_INACTIVE_COMMANDS slot is true (default is true).  If you are
+   writing your own commands or interactors, there are helper procedures that
+   make this checking easier to implement.
+
+* You can turn on highlighting of the handle in the selection handles
+  that the cursor is nearest, by setting the Am_SELECT_CLOSE_POINT_STYLE
+  slot of the selection widget.  Then, you can access which point it is
+  using the Am_SELECT_CLOSEST_POINT_WHERE slot of the selection widget,
+  which will be a Am_Move_Grow_Where_Attach.
+  Am_SELECT_CLOSE_POINT_STYLE, // style for handle closest to cursor
+  Am_SELECT_CLOSEST_POINT_OBJ, // object that closest point is in
+  Am_SELECT_CLOSEST_POINT_WHERE, // where_attach to say which point it is
+  Am_SELECT_CLOSEST_POINT_METHOD, // method to figure out which end
+
+* Changed parameters to Am_Custom_Gridding_Method to have a reference
+object, and changed meaning of numbers in grid to be where object goes
+and not input (mouse) X,Y.
+
+* More general Am_MULTI_OWNERS and Am_MULTI_FEEDBACK_OWNERS semantics for
+Interactors.  It is no longer required to have only one owner per
+window.
+
+* Single Constraint mode is now a property of a constraint rather than
+of a slot, so replace obj.Set_Single_Constraint_Mode(slot, false) with
+obj.Set(slot, constraint.Multi_Constraint());  See below for more details.
+
+1.4 Bug Fixes
+--------------       
+
+* Fixed gridding so works correctly.  In particular, gridding is with respect
+to the group instead of the window, and jumps when the mouse is in the center
+of the square, instead of the edge.
+
+* Fixed Am_Strings so don't crash if created with a null string
+
+* Fixed bugs with pixmaps and different screen depths and color maps
+on various platforms.
+
+* Made the Am_Gesture_Create_Command work for selective redo.
+
+* Am_ICONIFIED slot of windows now works correctly.
+
+* Copy no longer copies parts and slots marked as not inherited
+
+* Fixed so Interactors with multi-owner == T and run_also ==T don't run
+  twice: once for the global list and once for the window's list.
+
+* Fixed so if a one-shot interactor destroyed itself, other one-shots no
+  longer get to run.
+
+* Hash tables fixed so no longer causing seg faults.
+
+* Tabbing through text fields doesn't queue commands onto undo list
+  unless value changes
+
+========================================================================
+
+
+2. Description of Non-Backwards Compatible Changes
+--------------------------------------------------
+
+To get varying degrees of Amulet 2 object system compatibility, define
+one or more of the following symbols on the compiler command line:
+        AMULET2_WARNINGS:   weakens Set/Add errors into warnings
+        AMULET2_INSTRUMENT: adds filenames/line numbers to Set/Add warnings
+        AMULET2_GV:         defines GV macros
+        AMULET2_CONVERSION: turns on all of the above
+
+By default, the Makefile.vars.<compiler>.<platform> files define
+AMULET2_CONVERSION, for maximum compatibility.  We recommend that you
+use AMULET2_INSTRUMENT and AMULET2_WARNINGS to find where in your code
+you need to change things, and then change over everything, and then
+remove these.  Amulet has been designed to compile and work with none
+of these flags set.  You must compile the Amulet libraries and your
+code with the same settings of these flags.
+
+The main change we plan to make between the Beta release and the
+official release is turning off AMULET2_CONVERSION by default.  It
+will be ON for the beta release by default and OFF for the real
+release.  We recommend that you use the Beta release to fix up your
+code (AMULET2_CONVERSION will generate warnings instead of errors for
+many of the changes).  
+
+AMULET2_CONVERSION also makes the code run a lot slower, which is why
+we want to turn it off.
+
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+2.1. Get/Set/GV/Part changes
+
+The motivations for these changes are:
+* To make less common the errors where slots are Set into the wrong
+  objects.  Therefore, Set only works for slots that are already there.
+  We added obj.Add() to add new slots, to make this intention explicit.
+* To unify all the different forms of Get: There is no longer a GV or
+  Get_Part, or the Am_Value parameter form of Get.  Just use regular
+  Get.
+
+Get() and Set() and friends now accepts an optional bitflag argument.
+The current bitflags are:
+
+    Am_OK_IF_NOT_THERE
+    Am_RETURN_ZERO_ON_ERROR
+    Am_NO_DEPENDENCY
+    Am_OK_IF_THERE
+    Am_OVERRIDE_READ_ONLY
+
+You can OR these together.
+
+- added Peek(key) as shorthand for Get(key, Am_OK_IF_NOT_THERE);
+
+- Normally, as before, Get(SLOT) raises an error if the slot is not there or if
+the slot's value is invalid.  The meaning of the optional flags that can be
+passed to Get are:
+    - Am_OK_IF_NOT_THERE - then will always return without
+	crashing, but the Am_Value returned may be of type Am_MISSING_SLOT,
+        Am_FORMULA_INVALID or another error if the slot is invalid.  This
+        value will crash if you try to coerce it to another type, so always
+        check for .Valid() or .Exists()
+    - Am_RETURN_ZERO_ON_ERROR - if the slot is in error for any reason, return
+        the special Am_Value type Am_ZERO which converts itself into a zero or
+        NULL of any type.
+
+- ***INCOMPATIBLE CHANGE***: the following methods and macros were removed.
+
+  Get(key, value)   - convert to value = Peek(key)
+  GVM(key, value)   - convert to value = Get(key)
+  Get_Part          - convert to Get_Object
+  GV_Part           - convert to Get_Object
+  GV          	    - convert to just Get
+  Am_Define_Value_Formula - convert to Am_Define_Formula(Am_Value, ...)
+
+  At the end of this section is some Perl code that performs most of these
+  conversions automatically.
+
+- ***INCOMPATIBLE CHANGE***: Set() now raises an error by default if the slot
+  is not present.  To prevent these, either use Add() to create the
+  slot when the object is originally defined, or pass the Am_OK_IF_NOT_THERE
+  flag to Set().
+
+- added Add(key, val) which adds new slots to an object.  Thus, you should use
+  Add for new slots put into objects, and Set for slots that already
+  exist.  If the slot might or might not exist, you can use Set with
+  Am_OK_IF_NOT_THERE or Add with Am_OK_IF_THERE.
+ 
+- ***INCOMPATIBLE CHANGE***: removed the type code Am_UNINIT.  Its old meaning
+  is now represented by Am_FORMULA_INVALID.
+
+- ***INCOMPATIBLE CHANGE***: changed the meaning of the type code Am_NONE.  
+  It is now used exclusively for Am_No_Value (which is like a null Am_Value).
+  Its old meaning is now represented by Am_MISSING_SLOT.
+
+- ***INCOMPATIBLE CHANGE***:  Get_Object now calls Am_Error on type error:
+  i.e., if slot is valid but contains a value other than an Am_Object.  
+  If Get_Object is applied to a slot that might contain a variety of types
+  (like Am_COMMAND for some widgets), instead use Get to a
+  value and testing its type against Am_OBJECT.
+
+- ***INCOMPATIBLE CHANGE***:  GVM has gone away.  We suggest converting it to
+  Peek, but that won't work for all situations.  In particular, using Peek
+  means that you must be prepared to handle all errors, so Peek returns a
+  value that won't automatically coerce to 0. Thus the caller cannot simply
+  cast it to another type without first testing it with Exists() or Valid().  
+  Most callers check for Valid().  A few callers, however, try to do a
+  direct cast.  For these callers, GVM should be converted to 
+  value = Get(key, Am_RETURN_ZERO_ON_ERROR)
+
+#
+# Perl script for simple automatic conversions.
+# put the next part of this message in a file named "convert" and run:
+#	perl -i~ -p convert <files to convert>
+#
+# 
+# Get with value parameter ==> Peek
+# GVM with value parameter ==> Peek
+#  (note: these automatic substitutions succeed only when the object, 
+#   slot key, and value parameter are all simple identifiers)
+#
+s/\b(\w+)\s*\.\s*Get\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)/$3 = $1.Peek($2)/g;
+s/\b(\w+)\s*\.\s*GVM\s*\(\s*(\w+)\s*,\s*(\w+)\s*\)/$3 = $1.Peek($2)/g;
+
+#
+# Get_Part, GV_Part ==> Get_Object
+#
+s/Get_Part\b/Get_Object/g;
+s/GV_Part\b/Get_Object/g;
+
+#
+# Am_Define_Value_Formula ==> Am_Define_Formula (Am_Value, name)
+#    NOTE: You should check all of these to add a return value;
+#    statement
+#
+s/Am_Define_Value_Formula\s*\(\s* ( \w+ ) \s*\)/Am_Define_Formula ( Am_Value, \1 )/g;
+
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+2.2. Am_Custom_Gridding_Method
+
+The type of this method, which goes into the Am_GRID_METHOD slot of
+interactors, has changed from:
+OLD: Am_Define_Method_Type(Am_Custom_Gridding_Method, void,
+OLD: 		      (Am_Object inter, int x, int y,
+OLD: 		       int& out_x, int & out_y))
+to be:
+Am_Define_Method_Type(Am_Custom_Gridding_Method, void,
+		      (Am_Object inter, const Am_Object& ref_obj, int x, int y,
+		       int& out_x, int & out_y))
+Note that you now get a ref_obj for the grid points (x, y).  Also, the
+x and y are the points the object will be set with (usually, the left
+and top) rather than the actual input points of the mouse, so you can
+much more easily get objects to go where you want them.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+2.3. Enums are now 1st class types
+ So don't use (int) conversions for things like Am_Move_Grow_Where_Attach.
+ For example, change 
+	obj.Set(SLOT, (int)Am_CHOICE_TOGGLE)
+   to be just
+	obj.Set(SLOT, Am_CHOICE_TOGGLE)
+   See below for a discussion of the new Pointer_Wrappers and Enum_Wrappers.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+2.4. Renamed Print_Name() to be Print() everywhere.
+   See below for a discussion of the various new printing methods.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+2.5. Multi_Constraint
+
+The notation about whether a constraint should be removed when the
+slot is set with a new value is no longer a property of the slot.  It
+is now a property of the constraint in the slot.  Therefore, we
+REMOVED the methods:
+   OLD:  obj.Set_Single_Constraint_Mode(Am_Slot_Key, bool)
+and
+   OLD:  obj_adv.Get_Slot(Am_Slot_Key).Set_Single_Constraint_Mode (false);
+
+Instead use a form like:
+	constraint.Multi_Constraint()
+For example:
+
+OLD:  obj.Set (Am_SELECTED, button_sel_from_value)
+         .Set_Single_Constraint_Mode(Am_SELECTED, false);
+
+NEW:  obj.Set (Am_SELECTED, button_sel_from_value.Multi_Constraint());
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+2.6. Slot Name Changes
+
+The Am_Slot_Key variables Am_SCROLLING_GROUP and Am_UNDO_DIALOG_BOX
+have been renamed to Am_SCROLLING_GROUP_SLOT and Am_UNDO_DIALOG_BOX_SLOT,
+to avoid linker name space conflicts under VMS.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+2.7. Image Files Moved
+
+All of the Xbitmap and gif files used in Amulet have been moved into
+the lib/images directory; the lib/pixmaps directory no longer exists.
+Xbitmap files that formerly had no filename extension (e.g. borg,
+grey, crosshair) have been renamed with the .xbm extension (e.g to
+borg.xbm, grey.xbm, crosshair.xbm).
+
+=============================================================================
+=============================================================================
+
+3. Quick Guide to New Features
+-------------------------------
+These features are more fully documented in the Amulet V3.0 Reference Manual.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+3.1. Animations
+
+Amulet 3 now supports animations and timers.  The basic mechanism for
+animation is called an "animation constraint," which can be attached
+to one or more slots on an object to smoothly change their values over
+time.  For instance, if an animation constraint is attached to the
+Am_LEFT and Am_TOP slots of a graphical object, then whenever the
+object's position is changed from (L1, T1) to (L2, T2), the animation
+constraint will delay the change and smoothly interpolate Am_LEFT from
+L1 to L2 and Am_TOP from T1 to T2.
+
+Animation constraints are instances of the Am_Animator object.  To add
+an animation constraint to an object, make an instance of Am_Animator
+and use Am_Animate_With to set it into each slot it should control.
+For instance, here is how a rectangle's position would be animated:
+
+	Am_Object my_animator = Am_Animator.Create ("my_animator");
+	Am_Object moving_rectangle = Am_Rectangle.Create ()
+		.Set (Am_LEFT, Am_Animate_With (my_animator))
+		.Set (Am_TOP, Am_Animate_With (my_animator))
+		;
+
+Animation constraints take a number of parameters, which are slots in the
+instance of Am_Animator you create.
+
+Am_VELOCITY: velocity of change (in pixels per second).  Setting
+	this slot causes the duration of an animation to depend on
+	the distance that must be animated.
+Am_DURATION: duration of animation, an Am_Time.  Setting this
+	slot to Am_Time(n) results in an n-millisecond animation,
+	no matter how far the slots must be animated.
+* NOTE: You pick one of Am_VELOCITY or Am_DURATION to set and the other
+  is calculated from the one you set.  The default is a velocity of
+  200 pixels per second.
+Am_MIN_REPEAT_DELAY: smallest allowable timing interval.  Animation
+	constraints normally recompute the timing interval based on
+	the distance that must be animated through, but in order to 
+	avoid taking up 100% of CPU time, the timing interval is never
+	made smaller than this slot's value.  Defaults to Am_Time(25)
+	(i.e., 25 milliseconds).	  
+Am_ACTIVE: Boolean indicating whether an animation should occur when
+	the slot is changed.  When true (the default), the animator
+	is active and animations occur.  When false, the animator
+	is inactive and no animations occur.
+Am_INTERRUPTIBLE: Boolean indicating whether an animation in progress
+	should be interrupted by changes to the slot.  When true (the
+	default), the running animation changes direction and heads
+	towards	the newly-set value.  When false, the running animation
+	finishes the animation in progress, then begins another animation
+	head towards the newly-set value.
+Am_COMMAND: command to run when animation completes.
+
+The basic animation constraint, Am_Animator, manages an arbitrary
+number of numeric slots (integers or floats).  Other kinds of
+animators are defined for other types of slots.  Examples of using
+most of these animators may be found in the animations test program,
+src/anim/testanimators.cc.
+
+Am_Animator: linear interpolation of any number of numeric slots.
+
+Am_Blink_Animator: alternates a slot between two values (of any type).
+        Specify the two values in the Am_VALUE_1 and Am_VALUE_2 slots
+        of the animator. 
+
+Am_Through_List_Animator: moves a slot through a list of values.
+	Especially useful on the Am_IMAGE slot of an Am_Bitmap object,
+	to flash through a sequence of images.  Put an Am_Value_List
+        of values into the Am_LIST_OF_VALUES slot.  See
+	src/anim/testanimators.cc for an example.
+
+Am_Visible_Animator: reacts to changes in Am_VISIBLE by flying an object
+	onscreen or offscreen, or by shrinking and growing the object.
+	See src/anim/testanimators.cc for examples.
+
+Am_Fly_Apart_Animator: reacts to changes in Am_VISIBLE by simulating
+	breaking the object up into parts and flying the parts offscreen
+	(or onscreen, depending on whether the object is going invisible
+	or visible).  
+
+Am_Style_Animator: linear interpolation of one Am_Style slot
+	(color, line thickness, and halftoning)
+
+Am_Exaggerated_Animator: linear interpolation of numeric slots, with 
+	anticipation ("windup") at start of animation, and feedback
+	("wiggling") at end.
+
+Am_Point_List_Animator: animates changes to the Am_POINT_LIST slot of a
+	polygon.
+
+Am_Stepping_Animator: interpolates numeric slots in quantized steps
+
+Finally, Am_Animator objects may be used as simple timers.  To enable
+this, make an instance of Am_Animator whose Am_REPEAT_DELAY is the
+desired time interval and whose Am_ANIMATION_METHOD is the code to run
+at every timer tick, and then start it running with Am_Start_Animator.
+For example:
+
+	Am_Object my_timer = Am_Animator.Create ("my_timer")
+	    .Set (Am_REPEAT_DELAY, Am_Time (100))    // every 100 milliseconds,
+	    .Set (Am_ANIMATION_METHOD, my_timer_tick)// call this method
+	    ;
+        Am_Start_Animator (my_timer);   // start the timer running
+
+	Am_Define_Method (Am_Timer_Method, void, my_timer_tick,
+		  (Am_Object my_timer, const Am_Time& elapsed_time)) {
+	   // ... code to execute once every timer tick
+	}
+
+To stop the timer, use Am_Stop_Animator().
+
+The Inspector now has a new menu for pausing, resuming and single-stepping all
+animations.  This is useful for debugging animations.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+3.2. Gilt
+
+Thanks to S. Nebel from Linkworks Ltd, Wellington NZ who wrote and
+contributed the AmEdit program, I was inspired to modify AmEdit into
+the Gilt Interface Builder.
+
+Gilt allows you to place widgets interactively and set some
+properties, and then write out C++ and .h files that can be combined
+with your application.  While most of the operation should be obvious,
+here are some tips about some things that might not be obvious.  Also,
+the Amulet V3.0 Reference Manual includes a complete chapter on Gilt.
+
+* The main palette on the left contains the various kinds of things
+you can create, as well as the arrow for selecting things, and "Run"
+to try out the interface.
+* Shapes that can be resized are placed by dragging out a bounding
+box.
+* To change the properties of objects, including the names listed for
+panels, click on them with the middle
+mouse button, or doubleclick with the left button.
+* The color chips are used to change the Am_FILL_STYLE of the selected
+item(s).  The first (upper left) color is actually clear
+(Am_No_Style). If no objects are selected, then clicking on the color
+chips changes the color of the background.
+* The lines are to change the Am_LINE_STYLE of the selected
+item(s).  The first (upper left) one is actually clear
+(Am_No_Style).  The Am_LINE_STYLE also controls the color of text objects.
+* In the arrange menu are useful commands that might not be obvious:
+	- Turn grid on / off - this is a toggle.
+	- Nudge Left/... - these move the selected item(s) one pixel
+	- Align Lefts / ... - these make all the selected objects have
+		the same left as the leftmost object.
+	- Same Widths / Heights - these make all the selected objects
+		have the same width as the widest object.
+* The window can be saved to a file in Amulet's internal save/load
+format, and read back in.  You can also generate a C++ file and a .h
+file.  The Generate C++ dialog box allows the main group or window to
+be named, and then the file names to be specified.  You can choose
+whether to create a window or a group, and if a window, some
+properties.  The size of the window or group can either be the size of
+the parts (using the constraints Am_Width_Of_Parts and
+Am_Height_Of_Parts) or else an explicit width and height.  If
+explicit, the default numbers come from the current size of the
+window, so adjust the window's size before bringing up the Generate
+C++ dialog box.
+* The C++ file cannot be read back in, so any changes made by hand editing
+the C++ file will be lost if you go back and modify the original picture.
+* The way that the generated objects are intended to be used is that
+the designer gives each part that they want to access (which would
+include each widget) a name.  Then, these names are used as the
+part names for that object inside the main object, and you can get and
+set the Am_VALUE of the widgets by getting that part of the object.
+If you group a set of widgets in a group, then give the group a name
+as well (by double-clicking on it) so you can get the parts inside the
+group.  The object names are defined as slots, so use unique, legal
+names.
+
+* See samples/examples/example2.cc for an example of how to use a Gilt-created
+  dialog box.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+3.3. Pointer_Wrappers and Enum_Wrappers
+
+It is now much easier to put your custom C++ objects and values into
+Amulet objects.  We have created two sets of new wrapper macros, one
+for pointers put into Amulet objects, called Pointer Wrappers, and
+another for enumerated types.  The high-level Am_Type_Support class
+can be used for any other type as well (for example, for classes like
+Am_Input_Char which fit into a word and therefore do not have to be
+accessed through a pointer).
+
+For pointers, use the macro Am_Define_Pointer_Wrapper in your .h file.
+For a class foo, the call would be
+	Am_Define_Pointer_Wrapper(foo)
+This creates a new class Am_foo which is a wrapper for pointers to
+foo.  To finish the definition, you need to create a subclass of
+Am_Type_Support in your .cc file which should define (at least) the
+method Print.  This is used to show the object in the Inspector.  If
+you supply a From_String method, then users can type in new values in
+the Inspector.  Then, you pass a pointer to an instance of this
+type_support object to Am_Define_Pointer_Wrapper_Impl in your .cc
+file:
+	class foo_type_support : public Am_Type_Support {
+ 	 void Print (ostream& os, const Am_Value& value) const {
+	   os << "FOO";
+	 }
+	} foo_type_support_obj;
+	Am_Define_Pointer_Wrapper_Impl(foo, &foo_type_support_obj)
+
+To store a foo pointer into a slot, use:
+	foo* fp = ....;
+	obj.Set(SLOT, Am_foo(fp));
+This will make sure that the pointer is typed.  To get the value out
+without any typechecking, just do
+	fp = (Am_Ptr)obj.Get(SLOT);
+to do full typechecking, to make sure the slot has the right type in
+it, do
+	fp = Am_foo(obj.Get(SLOT)).value;
+
+For enumerated types, you can use the built-in mechanisms if the
+enumeration constants are numbered from 0 consecutively, and then
+the system will create a parser for the names.  Otherwise, you have to
+create your own Am_Type_Support object to do the parsing and
+unparsing.  There are 2 forms of the Enum_Support macros: one where
+you define an enumeration type to hold the values, and another where
+you just use constants.  Both are represented in inter.h.
+For when you don't need the enumeration type:
+	Am_Define_Enum_Long_Type(Am_Choice_How_Set)
+	const Am_Choice_How_Set Am_CHOICE_SET (0);
+	const Am_Choice_How_Set Am_CHOICE_CLEAR (1);
+	const Am_Choice_How_Set Am_CHOICE_TOGGLE (2);
+	const Am_Choice_How_Set Am_CHOICE_LIST_TOGGLE (3);
+Then in the .cc file:
+  Am_Define_Enum_Support (Am_Choice_How_Set, "Am_CHOICE_SET Am_CHOICE_CLEAR "
+     "Am_CHOICE_TOGGLE Am_CHOICE_LIST_TOGGLE");
+Am_Define_Enum_Support takes a list of string names of the values
+with a single space between each string.
+
+If you need a enum type (so, for example, you can do switch() on the
+value) use:
+
+  enum Am_Move_Grow_Where_Attach_vals { Am_ATTACH_WHERE_HIT_val,
+		 Am_ATTACH_NW_val, Am_ATTACH_N_val, Am_ATTACH_NE_val };
+  Am_Define_Enum_Type(Am_Move_Grow_Where_Attach, 
+			Am_Move_Grow_Where_Attach_vals)
+  const Am_Move_Grow_Where_Attach Am_ATTACH_WHERE_HIT(Am_ATTACH_WHERE_HIT_val);
+  const Am_Move_Grow_Where_Attach Am_ATTACH_NW(Am_ATTACH_NW_val);
+  const Am_Move_Grow_Where_Attach Am_ATTACH_N(Am_ATTACH_N_val);
+  const Am_Move_Grow_Where_Attach Am_ATTACH_NE(Am_ATTACH_NE_val);
+and put a Am_Define_Enum_Support (same format as above) in the .cc
+file.
+
+To use the enum values, just set the values into slots and get them
+out.  For example,
+	obj.Set(SLOT, Am_ATTACH_WHERE_HIT);
+	Am_Move_Grow_Where_Attach attach = obj.Get(SLOT);
+To get the enum value, you can do:
+	Am_Move_Grow_Where_Attach_vals val = attach.value;
+or 
+	switch (attach.value) {
+	  case Am_ATTACH_NW_val: ...
+
+To deal with other types for which neither pointers or enums are
+appropriate, you can create a subclass of Am_Type_Support and directly
+associate it with the appropriate type id.  Am_Get_Unique_ID_Tag now
+takes a pointer to a Am_Type_Support object.
+
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+3.4. Drag-and-drop
+
+Amulet's drag and drop feature has been added as an automatic feature to the
+normal selection widget.  Drag and drop permits the following activities:
+
+  - Linking together two or more selection areas (e.g., in different windows)
+      into one meta-area. 
+  - Dragging items from one window into another.
+  - Dragging items from an area into an area nested within an area.
+  - Targetting objects that are not selection widgets.
+
+Note: Amulet's drag-drop facility is not integrated with any of the compound
+document software that is available on some platforms.  Specifically, our
+drag-drop has its own implementation and is not hooked into OLE or OpenDoc.
+
+To link together two or more selection widgets, set the Am_MULTI_SELECTIONS
+slot of all affected widgets to a Am_Value_List of all widgets.
+
+  Am_Object select1 = Am_Selection_Widget.Create ("select1")
+    ...
+  ;
+  Am_Object select2 = Am_Selection_Widget.Create ("select2")
+    ...
+  ;
+  Am_Object select3 = Am_Selection_Widget.Create ("select3")
+    ...
+  ;
+
+  Am_Value_List select_list = Am_Value_List ()
+	.Add (select1).Add (select2).Add (select3);
+  select1.Set (Am_MULTI_SELECTIONS, select_list);
+  select2.Set (Am_MULTI_SELECTIONS, select_list);
+  select3.Set (Am_MULTI_SELECTIONS, select_list);
+
+The Am_MULTI_SELECTIONS slot will link all the selection widgets together.
+A selected object dragged from one widget can be dropped on any of the other
+widgets.  Widgets can be linked as long as they are in the same program.
+Widgets in separate windows or widgets that are nested within one another
+will work correctly.
+
+The manner in which the object is dropped onto a selection widget is
+determined by a method in the Am_DROP_TARGET_TEST slot.  A drop test is a
+method of type "Am_Where_Method" which looks like:
+
+Am_Define_Method(Am_Where_Method, Am_Object, my_where_test
+		      (Am_Object inter, Am_Object widget,
+		       Am_Object event_window, int x, int y)) {
+  ... }
+
+The widget parameter refers to the selection widget that is the current
+target of the drag, the inter parameter is the interactor that is moving the
+object (this can normally be ignored).  The event_window, x, and y parameters
+is the current location of the mouse pointer.  The purpose of the where_test
+is to provide a means for the widget to reject a possible source.  If the
+where_test is "true," which it is by default, then all objects are accepted.
+If the where_test method exists and it returns Am_No_Object, the drop is
+rejected.  If the method returns an object, then that object is tested for a
+Am_DROP_TARGET command which will be used for further processing.  See below
+for discussion of Am_DROP_TARGET and Am_Drop_Target_Command.
+
+A generic where method is provided in Amulet called Am_In_Target.  This
+command returns the topmost object that contains a Am_DROP_TARGET slot.  This
+method is useful when the selection widget contains other objects that can
+serve as drop targets.
+
+Objects other than selection widgets can also serve as drop targets.  In such
+cases the position data is lost but value is transferred by way of a special
+"drop target command" stored in the object.  The drop command must be an
+instance of the type Am_Drop_Target_Command and must be stored in the slot
+Am_DROP_TARGET of the object that is the potential target.
+
+The Am_Drop_Target_Command has several method slots:
+
+      slot name                 type
+   Am_DROP_TARGET_TEST  Am_Drop_Target_Interim_Do_Method
+   Am_DO_METHOD         Am_Drop_Target_Do_Method
+   Am_UNDO_METHOD       Am_Object_Method
+   Am_REDO_METHOD       Am_Object_Method
+
+   Am_INTERIM_SELECTED  bool  [ set by system ]
+
+The first slot is the test method which a target uses to accept or reject a
+value.  The method type "Am_Drop_Target_Interim_Do_Method" has the form:
+
+   bool target_test (Am_Object& command, const Am_Value& value)
+
+The command parameter is a self reference to the command object and the
+value parameter is the object being dragged.  The test method should return
+true or false depending on whether the object is acceptable to the target.
+The source of the object can be determined by looking at the object's owner.
+
+If the object is accepted, the system will set the Am_INTERIM_SELECTED slot
+to true.  If the mouse passes outside of the target, or the target rejects
+the object, it will be made false.  It is also cleared when the mouse button
+is released.  This slot can be used to change the object's look to show that
+it is accepting the source.
+
+Once an object is accepted by a target (and dropped by releasing the mouse)
+Amulet will call the DO_METHOD on the Drop_Target_Command.  The do method
+has an extra parameter from the usual Am_Object_Method and has the form:
+
+  void drop_do (Am_Object& command, const Am_Value& value)
+
+The value parameter is the object being dropped.  The do method may do
+whatever it wants with the value.  Provided the command has a NULL or valid
+IMPLEMENTATION_PARENT, the command will be queued on the undo handler.  There
+the UNDO_METHOD and REDO_METHOD may be called when appropriate.
+
+For drop target commands that are stored on groups for a selection widget
+(the group of a selection widget is the object pointed to by the Am_OPERATES_ON
+slot), the DO, UNDO, and REDO methods are ignored.  Instead, normal dragging
+behavior is performed if the TEST method returns true.
+
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+3.5. Save and Load
+
+The save and load mechanism is quite general, and allows arbitrary
+saving and loading methods to be used for each object.  And you can
+write your own save-load context object to handle everything yourself.
+Here, only the simplest way to use the save/load mechanism is
+described, which uses the Am_Default_Load_Save_Context and the
+Am_Standard_Save_Object method.  This method saves an object by saving
+the values of the specified slots to the file, and loads it by loading
+the specified slots again.  You can see examples of using this in the
+example1.cc in amulet/samples/examples/ and in
+amulet/src/widgets/testselectionwidgets.
+
+To support save and load:
+* Define a set of prototype objects from which all the objects in your
+system will be created.
+* In each prototype, set the following slots:
+    .Set (Am_SAVE_OBJECT_METHOD, Am_Standard_Save_Object)
+    .Set (Am_SLOTS_TO_SAVE, Am_Value_List()
+	  .Add(Am_LEFT).Add(Am_TOP).Add(Am_WIDTH).Add(Am_HEIGHT))
+    ;						   
+* The Am_SLOTS_TO_SAVE should have a Am_Value_List to which you add
+whatever slots (either built-in or user-defined) that you need to
+fully specify an object.  
+* If the object is a GROUP object (so that the parts need to be saved
+in addition to the slots, then use 
+    .Set (Am_SAVE_OBJECT_METHOD, Am_Standard_Save_Group)
+instead of Am_Standard_Save_Object.
+
+* Then, you need to register each of the prototypes you want to save
+out with a unique string name:
+  Am_Default_Load_Save_Context.Register_Prototype("ARC", arc_proto);
+  Am_Default_Load_Save_Context.Register_Prototype("RECT", rectangle_proto);
+  Am_Default_Load_Save_Context.Register_Prototype("LIN", line_proto);
+  Am_Default_Load_Save_Context.Register_Prototype("POLY", polygon_proto);
+
+* You can use the standard commands for loading and saving to a file.
+		    .Add (open_command = Am_Open_Command.Create()
+			  .Set(Am_HANDLE_OPEN_SAVE_METHOD, use_file_contents))
+		    .Add (Am_Save_As_Command.Create()
+			  .Set(Am_HANDLE_OPEN_SAVE_METHOD, contents_for_save))
+		    .Add (Am_Save_Command.Create()
+			  .Set(Am_HANDLE_OPEN_SAVE_METHOD, contents_for_save))
+The open command takes a method that takes an Am_Value_List of objects
+that were read from the file, and does something with them.  The
+Am_Save_Command and Save_As command take a method that returns an
+Am_Value_List of objects to save to the file.  These can be
+hierarchical.  For example:
+
+// This method should take the supplied contents list and add it to
+// the window, after removing what is already there
+Am_Define_Method (Am_Handle_Loaded_Items_Method, void, use_file_contents,
+		  (Am_Object command, Am_Value_List &contents)) {
+  //Get the group to put the created object into.  Every command will
+  //have a Am_SAVED_OLD_OWNER which is set with the widget or
+  //interactor the command is attached to.  Get the CREATED_OBJS group
+  //out of that widget's window.
+  Am_Object created_objs = command.Get_Object(Am_SAVED_OLD_OWNER)
+    .Get_Object(Am_WINDOW).Get(CREATED_OBJS);
+  Am_Value_List current = created_objs.Get (Am_GRAPHICAL_PARTS);
+  Am_Object item;
+  //first delete all of the current contents of the window
+  for (current.Start (); !current.Last (); current.Next ()) {
+    item = current.Get ();
+    item.Destroy ();
+  }
+  //now add the new objects
+  for (contents.Start (); !contents.Last (); contents.Next ()) {
+    item = contents.Get ();
+    created_objs.Add_Part (item);
+  }
+}
+
+//This method should return the list of objects to save
+Am_Define_Method (Am_Items_To_Save_Method, Am_Value_List, contents_for_save,
+		  (Am_Object command)) {
+  Am_Object created_objs = command.Get_Object(Am_SAVED_OLD_OWNER)
+    .Get_Object(Am_WINDOW).Get(CREATED_OBJS);
+  Am_Value_List obs_to_save = created_objs.Get (Am_GRAPHICAL_PARTS);
+  return obs_to_save;
+}
+
+Alternatively, if you want to handle your own opening and saving, you
+can use the more low-level functions:
+
+For loading:
+  ifstream in_file ((const char*)filename, ios::in);
+  Am_Default_Load_Save_Context.Reset ();
+  Am_Value contents = Am_Default_Load_Save_Context.Load (in_file);
+  if (!contents.Valid () || !Am_Value_List::Test (contents)) 
+    Am_Show_Alert_Dialog (Am_Value_List ()
+			  .Add ("File does not contain valid data:")
+			  .Add (filename));
+  else  //contents has the list of objects loaded
+   ... do something with contents
+
+For saving:
+  ofstream out_file (filename, ios::out);
+  Am_Default_Load_Save_Context.Reset ();
+  // items_to_save is an Am_Value_List of the objects to save.
+  Am_Default_Load_Save_Context.Save (out_file, Am_Value (items_to_save));
+
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+3.6. Print(), Println(), To_String(), From_String()
+
+These functions are now available for most types to help with
+debugging and printing.  All wrapper data pointers and wrappers
+themselves will accept these, as will objects, Am_Drawonables, fonts,
+etc.  Generally, Print(os) is supposed to work for all types, and
+Println() prints to cout followed by a return and a flush.  Thus
+Println() is quite useful during debugging.  To_String() is defined to
+return the string for an object BUT ONLY IF THIS IS CHEAP.  If
+returning a string would require allocating memory, then To_String
+returns NULL.  For types with names, like Am_Objects, To_String()
+returns the name.  Am_Value.To_String() will print the object to a
+string stream, so it always can return a reasonable string.
+From_String() is not implemented for most types, but it eventually
+will parse the output from Print() to allow objects of the type to be
+constructed.
+
+-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+3.7 New Look and Feels
+
+All the widgets now will change their appearance if you set the Am_WIDGET_LOOK
+slot to be Am_MOTIF_LOOK, Am_WINDOWS_LOOK, or Am_MACINTOSH_LOOK.  The value
+Am_NATIVE_LOOK can also be used whose value depends on whatever platform the
+code is being compiled on.  The default is Am_NATIVE_LOOK.  
+
+To change the look of all the widgets, you can call the function
+	void Am_Set_Default_Look( Am_Widget_Look inLook = Am_NATIVE_LOOK );
+which justs sets the Am_WIDGET_LOOK slot of the Am_Screen object, to which all
+widgets have a constraint in their Am_WIDGET_LOOK slots by default.  Of
+course, you can override any individual widget's look by just setting its
+local Am_WIDGET_LOOK slot.
+
+When debugging is enabled, a special interactor is defined which cycles the
+look-and-feel through all three choices when you hit CONTROL_SHIFT_META_L, so
+you can easily see what your application would look like on other platforms.
+
+
+=============================================================================
+=============================================================================
+
+4. How to Make Amulet V3.
+=========================
+
+4.1 Amulet V3 For Unix:
+-----------------------
+
+Unpacking amulet.tar.Z
+-----------------------
+
+Amulet V3 for Unix is distributed as compressed tar file.  To unpack:
+At the Unix prompt, first type "uncompress amulet.tar.Z".  Your copy
+of amulet.tar.Z will be replaced with amulet.tar.  Now type "tar -xvf
+amulet.tar" at the Unix prompt to generate the amulet/ directory tree
+as a subdirectory of your current directory. Set AMULET_DIR to the
+root directory of the Amulet software hierarchy on your machine.  The
+csh command to do this is:
+	setenv AMULET_DIR /usr/johndoe/amulet
+
+Setting Amulet Environment Variables 
+------------------------------------
+
+The Amulet build process depends on two environment variables,
+typically these are set in your .login file.
+
+AMULET_DIR: the pathname of the Amulet root directory on your machine
+
+AMULET_VARS_FILE: the name of the Makefile parameter file appropriate
+for your machine. 
+
+If you are using SunOS, Solaris or HP/UX, then set AMULET_VARS_FILE to
+one of the following files, which have been tested by the Amulet group
+on our own machines.
+
+ 	Makefile.vars.gcc.Sun For gcc on SunOS 4.x
+ 	Makefile.vars.gcc.Solaris For gcc on Solaris
+ 	Makefile.vars.gcc.HP For gcc on HP/UX 9.x
+ 	Makefile.vars.CC.Sun For ObjectCenter's CC on SunOS 4.x
+ 	Makefile.vars.CC.HP For ObjectCenter's CC on HP/UX 9.x
+
+Say you installed Amulet in /usr/johndoe/work, on a Sun using gcc.
+If you run csh, your .login might contain the lines:
+
+	setenv AMULET_DIR /usr/johndoe/work/amulet
+	setenv AMULET_VARS_FILE Makefile.vars.gcc.Sun
+
+If you run another Unix shell, the commands to set environment
+variables and export them (to all shell processes) may be different.
+If in doubt about the command to use, consult the man page for
+your chosen shell.
+
+
+Making the Library and Samples Programs
+---------------------------------------
+
+To build the Amulet library, connect to the amulet/bin directory and
+invoke make with no arguments.
+
+	cd amulet/bin
+	make
+
+This produces a standard debugging version of the amulet library in
+amulet/lib called libamulet.*.  The extension will vary depending on
+whether your machine supports shared libraries (typically with
+extensions .so and .sl) or only static libraries (with extension .a).
+
+To build one of the programs that comes with Amulet (for instance, the
+checkers game), run
+
+	make checkers.
+
+This builds checkers and puts it in amulet/bin.
+
+To build all the programs that come with Amulet, including the
+library, test programs and samples, run
+
+	make all
+
+To build both shared (if supported) and static versions of the Amulet
+library in both debugging (inspector-enabled) and optimized variants
+(amulet-opt.*) run
+
+	make libs
+
+If you are familiar with Amulet V2, note that we have removed the
+Makefiles for many of the samples (and the new samples like Gilt do
+not have Makefiles).  Instead, everything is made using the main
+Makefile in amulet/bin.
+
+Making your own Application
+---------------------------
+
+The easiest way to bootstrap your own application is to copy and
+modify the example Makefile in amulet/samples/tutorial.
+
+
+4.2 Amulet V3 For the PC:
+-------------------------
+
+Unpacking amulet.tar.gz
+-----------------------
+
+Amulet V3 for the PC is distributed as a gzipped tar file.  It can be installed
+as follows:
+
+To install the new release in C:\amulet using gzip and tar:
+
+   1. download the file to C:\amulet.tar.gz by clicking on the appropriate
+      link in the Amulet release web page:
+		http://www.cs.cmu.edu/~amulet/amulet3-release.html
+   2. at the MSDOS prompt, run gzip to decompress amulet.tar.gz, 
+      producing amulet.tar 
+		gzip -d amulet.tar
+   3. run tar to expand the archive into C:\amulet
+		tar -x -f amulet.tar
+
+Alternatively, you can install the new release using WinZip 6.2.  You can
+download an evaluation copy of WinZip from http:://www.winzip.com
+
+   1. download the file to C:\amulet.tar.gz by clicking on the appropriate
+      link in the Amulet release web page:
+		http://www.cs.cmu.edu/~amulet/amulet3-release.html
+   2. open WinZip
+   3. open C:\amulet.tar.gz, telling WinZip it is OK to decompress
+      the file in a temporary folder
+   4. extract the archive to C:\, checking the box "Use Folder Names"
+      in the extract dialog
+
+
+Making the Library and Samples with Visual C++
+----------------------------------------------
+
+These instructions assume you have installed Amulet in C:\amulet.  If
+you used a different directory, substitute it for C:\amulet.
+
+The PC and Unix versions of Amulet 3 now share the same Makefile.  This
+changes how the PC version is built.  You may build the Amulet
+library, samples and test programs by invoking nmake directly from the
+MSDOS Command Prompt; this is the most flexible alternative.  Or you
+may build the Amulet library, samples and test programs by invoking
+nmake indirectly under Microsoft Developer Studio; this is the easier
+alternative.
+
+Whichever alternative you use, if you are using Windows NT, you should
+use the System dialog in the Control Panel to add the following
+variables to your list of User Environment Variables.
+
+	Set AMULET_DIR=c:\amulet
+	Set AMULET_VARS_FILE=Makefile.vars.MSVC.Win32
+
+If you are using Windows 95, add these settings to your AUTOEXEC.BAT
+file, and restart your computer to have them take effect.
+
+
+Building under Microsoft Developer Studio
+-----------------------------------------
+
+1. Under Microsoft Developer Studio (MSVC++ 4.x) or Visual Studio
+   (MSVC++ 5.0), open the project workspace
+
+	c:\amulet\bin\amulet.mak
+
+2. From the Build menu, invoke
+
+	Build all
+
+   This builds the default (debugging) Amulet library (amulet.lib) and
+   puts it in c:\amulet\lib, and builds all of the Amulet test and
+   sample programs, and puts the executables in c:\amulet\bin.
+
+If you are using Microsoft Visual Studio 97 and find that linking is
+extraordinarily slow, you will need to install VS97 Service Pack 1.
+See http://www.microsoft.com/kb/articles/Q151/5/01.htm for details.
+
+Building from the MSDOS Command Prompt
+--------------------------------------
+
+Execute the following commands from a command prompt (that is, bring
+up an MSDOS Command Prompt Window, and type the following commands).
+Windows 95 users note that you may experience the "out of environment
+space" problem in the MSDOS Prompt Window.  To fix this problem,
+select the Memory tab of the Properties dialog for the window and
+increase the initial environment to at least 1024.
+
+1. To set up the environment for Visual C++, run
+
+	vcvars32 x86
+
+   The batch file VCVARS32.BAT should be found in the BIN
+   directory of your Visual C++ installation.
+  
+2. To build the Amulet library, run
+
+	cd c:\amulet\bin
+	nmake
+
+   This builds the default (debugging) Amulet library amulet.lib and
+   puts it in c:\amulet\lib.
+
+3. To build one of the programs that comes with Amulet (for instance,
+   the checkers game), run
+
+	nmake checkers.exe
+
+   This builds checkers and puts it in c:\amulet\bin.
+
+4. To build all the programs that come with Amulet, run
+
+	nmake all
+
+5. Eventually, you may want build both the default (debugging) and
+   optimized (amulet-opt.lib) versions of the amulet library.  To  
+   do so, run 
+
+	make libs
+
+   Note that this step runs the command Gnu fileutils command rm.
+   The Gnu fileutils package is obtainable via the URL:
+   http://www.cygnus.com/gnu-win32 
+
+Making your own Project
+-----------------------
+
+To create your OWN project using the Amulet v3.0 library, the easiest way is
+to copy and modify the example tutorial.mak file (MSVC++ 4.x) or
+tutorial.dsp file (MSVC++ 5.0) in the directory C:\amulet\samples\tutorial.
+
+To make your own project file that uses Amulet, you can do the following steps:
+
+1. Add "c:\amulet\include" as one of the include directories searched
+   by Visual C++.  For instance, in Microsoft Developer Studio (Visual
+   C++ 4.x), go to Tools/Options/Directories.
+
+2. Add "c:\amulet\lib" as one of the library directories, which is in
+   set in the same dialog box.
+
+3. Add the following preprocessor definitions to your project:
+
+	DEBUG               (if you want to enable the inspector)
+
+   If you are using MSVC++ 4.x you will need to add:
+
+	NEED_BOOL           (compiler does not support type bool)
+
+   *** Do not define this symbol if you are using MSVC++ 5.0 -- it does
+   support the type bool.
+
+   If you are converting amulet2 code, you may want to add
+
+	AMULET2_CONVERSION
+
+   In Microsoft Developer Studio (Visual C++ 4.0), you would add these
+   definitions by going to Build/Settings/Compile.
+
+4. Add the following libraries to your project:
+
+	amulet.lib          (the Amulet library)
+	winmm.lib           (the Windows multimedia library)
+	/nodefaultlib:libc  (already present through amulet.lib)
+
+   For instance, in Visual C++ 4.0, you would add these libraries
+   by going to Build/Settings/Link.
+
+   For an example of an Visual C++ 4.0 project for an Amulet application,
+   open samples/tutorial/tutorial.mak.  Open samples/tutorial/tutorial.dsp
+   if you are using Visual C++ 5.0.
+
+
+4.3 Amulet V3 For the Macintosh:
+----------------------
+
+As with prior releases of Amulet, Amulet 3.0 uses Codewarrior project
+files. Specifically, the projects were built and tested with Codewarrior
+10 (released Sept 1996). For those who have earlier versions than
+Codewarrior 10, we suggest upgrading.  While Amulet users have found
+that the Codewarrior 10 projects work smoothly with Codewarrior 11,
+Codewarrior 11 users should heed the caution in section 4.3.4 below,
+when you create your own projects.
+
+4.3.1 The "amulet.env" file
+---------------------------
+
+As with previous versions of Amulet, the amulet.env file is needed by
+some of the sample programs. For those upgrading, nothing has changed;
+your old "amulet.env" file should work just fine, provided it still
+points to your amulet root directory. For those who are trying Amulet
+for the first time, you need to add a text file named "amulet.env" in
+the preference folder of your active system folder. This file should
+contain the path to the root directory where amulet resides. See
+section 1.4.5.2 : 
+http://www.cs.cmu.edu/afs/cs/project/amulet/amulet2/manual/overview.html#1001522
+from the Amulet 2.0 manual for further details.
+
+4.3.2 Processor Support: PowerPC and 68K
+----------------------------------------
+
+Amulet currently supports both the original 68K based Macintoshes and
+the newer PowerPC based Power Macintoshes. Both versions share nearly
+identical source code, so an Amulet program that runs on PowerPC should
+also run on 68k machines. Note however that the PowerPC version receives
+more testing, and so there may be problems in the 68K versions.
+
+Performance on both platforms should receive a noticeable improvement as
+Amulet special memory manager is enabled on for both targets, via
+"#define MEMORY".
+
+Since the current Codewarrior environment does not allow for multiple
+targets in one project file, all the provided project files come in two
+flavors, one for each platform. When referring to project files, *** is
+used to denote with PPC or 68K, depending upon which target the user
+would like to build for.
+
+4.3.3 Building the Amulet library
+---------------------------------
+
+All the project files needed for Amulet are found in the bin/MAC
+subdirectory.
+
+The first step in building Amulet involves compiling the precompiled
+header.  Open bin/MAC/pch/AmuletHeaders***.proj and 'Compile'
+AmuletHeaders.pch.  Codewarrior will deposit a AmuletHeaders*** file in
+/bin/MAC/pch. This should need only be done once at installation.
+
+The next step involves building the Amulet Library. Open up
+bin/MAC/lib/amulet***.proj and make the project. This may take a little
+while, depending upon your system. Note that there are also
+amuletNoDebug***.proj files which build Amulet without debugging
+information.
+
+4.3.4 Other notes
+-----------------
+
+Project files for the Amulet sample applications are in
+bin/MAC/samples.
+
+Stationery files for making your own project files
+(am_stationery68k.proj.stat.bin and am_stationeryPPC.proj.stat.bin)
+are in bin/MAC/misc.
+
+If you are a Codewarrior 11 user, and do not use these stationery
+files when creating new projects, you MUST make sure that <mcompile.h>
+is NOT on the path.  When you create a new project using Codewarrior
+11, it automatically uses Codewarrior's new Standard Libraries which
+are incompatible with both the old libraries and Amulet.  Even if you
+remove the libraries, the old paths remain buried inside the
+preferences.  This brings in <mcompile.h>, which defines bool
+incorrectly.  You must remove the new standard library paths and put
+in the regular old ANSI ones.

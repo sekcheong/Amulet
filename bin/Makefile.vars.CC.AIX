@@ -1,0 +1,91 @@
+##
+##  This file sets the Amulet Makefile variables for
+##  CC (xlC) on an IBM RS6000/AIX-3.2.5 Workstation
+##
+## written by Gabor Herr (herr@iti.informatik.th-darmstadt.de)
+## updated for new makefiles by Amulet group (amulet-bugs@cs.cmu.edu)
+##
+##  Note: this makefile.vars file was contributed by an Amulet user.  The
+##        Amulet group has not tested it.  Please send
+##        any bug reports to amulet-bugs@cs.cmu.edu.
+##
+
+CC = CC
+LD = ld
+
+##
+## Parameters for Amulet programs
+## 
+
+# X11 directories, uncomment and set if necessary
+# X11_INC = -I/usr/X11/X11R6/include
+# X11_LIB = -L /usr/X11/X11R6/lib
+
+# compiler flags for Amulet programs
+AM_CFLAGS =  -I$(AMULET_DIR)/include $(X11_INC) \
+	-DNEED_STDLIB -DNEED_SELECT -DNEED_MEMMOVE -DNEED_STRING \
+	-DNEED_BOOL -DMEMORY
+
+# libraries needed by Amulet (interactors needs math library)
+AM_LIBS = $(X11_LIB) -lX11 -lm 
+
+
+##
+## Parameters for the Amulet library
+## 
+
+# directory where Amulet will (eventually) be installed
+# defaults to its current location (AMULET_DIR)
+AMULET_ROOT=$(AMULET_DIR)
+
+# additional compiler flags for development version
+AM_DEVELOP = -O2 -DDEBUG +d -g
+
+# additional compiler flags for release version
+AM_RELEASE = -O2
+
+# additional compiler flags for optimized version with inspector and debugging enabled
+AM_INHOUSE = -DDEBUG +d -g
+
+# additional compiler flags for optimized version with inspector but no debugging symbols
+AM_NODEBUGSYM = -O2 -DDEBUG
+
+# extra link flags for library test programs
+AM_LIB_LDFLAGS =
+
+# Makefile identifying the gem files for this platform
+AM_GEM_SOURCE = Makefile.gem.X
+
+# Makefile that knows how to make the Amulet library for this platform
+AM_STATIC_LIB_MAKE = Makefile.lib.unix.static
+
+# Set of library variants for make libs
+AM_LIBS_TO_MAKE = develop-static release-static
+
+AIXdefault: lib
+
+# Create shared library.
+#
+# Probably this should be integrated into the main Makefile in an
+# architecture independent fashion. For now one must call these rules
+# manually:
+#
+#   1. do a `make' or `make all' to create all necessary object files.
+#
+#   2. type `make sharedlib' to generate the shared library
+#
+# NOTE: In AIX, a shared library may be used both for static and
+# dynamic linking. To create a shared lib, you'll need a script called
+# `makeC++SharedLib', which is part of the xlC distribution. See the
+# xlC documentation for details.
+ 
+REQUIREDLIBS = $(AM_LIBS)
+AMULET_OBJS =  $(GEM_MODULE) $(ORE_MODULE) $(UTILS_MODULE) $(OPAL_MODULE) \
+    $(INTER_MODULE) $(WIDGETS_MODULE) $(DEBUG_MODULE) $(GESTURE_MODULE)
+ 
+sharedlib: $(AMULET_OBJS)
+	/usr/lpp/xlC/bin/makeC++SharedLib -p 10 $(REQUIREDLIBS) $(AMULET_OBJS)
+	-rm -f libamulet.a
+	ar cr libamulet.a shr.o
+	mv libamulet.a $(LIB_DIR)/libamulet.a
+	-rm -f shr.o

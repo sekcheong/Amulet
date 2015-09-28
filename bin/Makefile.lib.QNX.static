@@ -1,0 +1,65 @@
+##
+##  This file builds static libraries for QNX/X-Windows using Watcom 10.6
+##  
+##
+##  Note: this makefile.lib file was contributed by an Amulet user and
+##  updated by the Amulet group.  The Amulet group has not tested it
+##  on a QNX/X-Windows platform.
+##  Please send any bug reports to amulet-bugs@cs.cmu.edu.
+##
+##   Parameters (can be set in Makefile.vars.*):
+##	AR        standard archive program (usually ar)
+
+UTILS_LIB =  $(LIB_DIR)/libamutils$(LIB_MODIFIER).a
+GEM_LIB =    $(LIB_DIR)/libamgem$(LIB_MODIFIER).a
+ORE_LIB =    $(LIB_DIR)/libamobject$(LIB_MODIFIER).a
+AMULET_LIB = $(LIB_DIR)/libamulet$(LIB_MODIFIER).a
+
+FULL_AMULET_DEPENDENCIES = $(OPAL_MODULE) $(INTER_MODULE) $(DEBUG_MODULE) \
+    $(WIDGETS_MODULE) $(GESTURE_MODULE) $(ANIM_MODULE) \
+    $(ORE_MODULE) $(GEM_MODULE) $(UTILS_MODULE)
+FULL_ORE_DEPENDENCIES = $(ORE_MODULE) $(UTILS_MODULE)
+FULL_GEM_DEPENDENCIES = $(GEM_MODULE) $(UTILS_MODULE)
+FULL_UTILS_DEPENDENCIES = $(UTILS_MODULE)
+
+# Undefine these parameters, for example
+#	AMULET_LIB_DEPENDENCIES =
+# to keep from rebuilding the Amulet libraries after deleting the
+# Amulet object files 
+AMULET_LIB_DEPENDENCIES = $(FULL_AMULET_DEPENDENCIES)
+ORE_LIB_DEPENDENCIES = $(FULL_ORE_DEPENDENCIES)
+GEM_LIB_DEPENDENCIES = $(FULL_GEM_DEPENDENCIES)
+UTILS_LIB_DEPENDENCIES = $(FULL_UTILS_DEPENDENCIES)
+
+$(AMULET_LIB): $(AMULET_LIB_DEPENDENCIES)
+	$(AR) $(AMULET_LIB) $(FULL_AMULET_DEPENDENCIES)
+
+$(ORE_LIB): $(ORE_LIB_DEPENDENCIES)
+	$(AR) $(ORE_LIB) $(FULL_ORE_DEPENDENCIES)
+
+$(GEM_LIB): $(GEM_LIB_DEPENDENCIES)
+	$(AR) $(GEM_LIB) $(FULL_GEM_DEPENDENCIES)
+
+$(UTILS_LIB): $(UTILS_LIB_DEPENDENCIES)
+	$(AR) $(UTILS_LIB) $(FULL_UTILS_DEPENDENCIES)
+
+# Use these declarations to compile tests against static libraries
+
+NEEDS_GEM = $(GEM_LIB)
+USES_GEM  = -L$(LIB_DIR) -lamgem$(LIB_MODIFIER)
+STATIC_GEM = $(NEEDS_GEM)
+
+NEEDS_ORE = $(ORE_LIB)
+USES_ORE  = -L$(LIB_DIR) -lamobject$(LIB_MODIFIER)
+STATIC_ORE = $(NEEDS_ORE)
+
+NEEDS_ALL = $(AMULET_LIB)
+USES_ALL  = -L$(LIB_DIR) -lamulet$(LIB_MODIFIER)
+STATIC_ALL = $(NEEDS_ALL)
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# Inference rule
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+.cc.o:
+	$(CC) $(CFLAGS) -c $< -o $@

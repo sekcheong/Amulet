@@ -1,0 +1,662 @@
+# >>> CenterLine Make Targets <<<
+#
+
+
+##
+##  Set variables  (see Makefile for details)
+##
+
+include $(AMULET_DIR)/bin/Makefile.vars   # Sets pathname variables and
+                                          # loads $(AMULET_VARS_FILE) to
+                                          # set compiler variables
+
+inspector_obj:
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/inspector.o
+
+testgem_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/test_utils.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/testgem.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/testlineprops.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_GIF.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testgem
+
+
+testdpy_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/test_utils.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/testdpy.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/testbits.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/testcolor.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/testfonts.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/testwinprops.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_GIF.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testdpy
+
+
+
+testcopy_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/testcopy.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testcopy
+
+
+testtrans_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/testtrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testtrans
+
+testsubwins_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/testsubwins.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testsubwins
+
+testloop_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/testloop.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testloop
+
+testclip_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/testclip.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#load $(AM_CFLAGS) -I$(GEM_DIR)
+	#setopt program_name testclip
+
+
+testpoints_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/testpoints.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testpoints
+
+
+testwinsizes_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/testwinsizes.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testwinsizes
+
+
+testinput_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(GEM_DIR)/testinput.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testinput
+
+testobject_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(ORE_DIR)/testobject.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/object.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/formula.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/dynarray.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/standard_slots.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/value_list.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/stdvalue.o
+
+testopal_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/object.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/formula.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/dynarray.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/standard_slots.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/value_list.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/priority_list.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/opal.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/windows.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/text_fns.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_choice.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_move_grow.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_new_points.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_text.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_animation.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/command_basics.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/testopal.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testopal
+
+testgobs_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/object.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/formula.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/dynarray.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/standard_slots.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/value_list.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/priority_list.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/opal.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/windows.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/text_fns.o	
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/inspector.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/tracer.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_choice.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_move_grow.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_new_points.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/command_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_text.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_animation.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/testgobs.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testgobs
+
+testinter_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(INTER_DIR)/testinter.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_GIF.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/object.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/formula.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/dynarray.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/standard_slots.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/value_list.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/priority_list.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/opal.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/windows.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/text_fns.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_choice.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_move_grow.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_new_points.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/command_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_text.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_animation.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/inspector.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/tracer.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/scroll_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/text_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/selection_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/editing_commands.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/dialog_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/button_widgets.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/inter_gesture.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_classifier.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_trainer.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_features.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_matrix.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testinter
+
+testaniminter_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(INTER_DIR)/testaniminter.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_GIF.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/object.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/formula.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/dynarray.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/standard_slots.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/value_list.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/priority_list.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/opal.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/windows.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/text_fns.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_choice.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_move_grow.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_new_points.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/command_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_text.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_animation.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/inspector.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/tracer.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/scroll_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/text_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/selection_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/editing_commands.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/dialog_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/button_widgets.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/inter_gesture.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_classifier.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_trainer.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_features.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_matrix.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testaniminter
+
+testwidgets_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/testwidgets.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_GIF.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/stdvalue.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/object.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/formula.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/dynarray.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/standard_slots.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/value_list.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/priority_list.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/opal.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/windows.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/text_fns.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_choice.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_move_grow.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_new_points.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_text.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_animation.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/command_basics.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/inspector.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/tracer.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/scroll_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/text_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/selection_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/editing_commands.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/dialog_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/button_widgets.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/inter_gesture.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_classifier.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_trainer.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_features.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_matrix.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#setopt program_name testwidgets
+
+testselectionwidget_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/testselectionwidget.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/undo_dialog_box.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_GIF.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/object.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/formula.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/dynarray.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/standard_slots.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/value_list.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/priority_list.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/opal.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/windows.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/text_fns.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_choice.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_move_grow.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_new_points.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_text.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_animation.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/command_basics.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/inspector.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/tracer.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/scroll_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/text_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/editing_commands.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/dialog_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/selection_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/button_widgets.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/inter_gesture.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_matrix.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_classifier.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_features.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_trainer.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#load $(AM_CFLAGS) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/stdvalue.o
+	#setopt program_name testselectionwidget
+
+testbugs_obj:
+	#cd $(AMULET_DIR)/bin
+	#load $(AM_CFLAGS) testbugs.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(GEM_DIR)/gem_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_GIF.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_points.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_windows.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_styles.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_draw.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_text.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_image.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_cursor.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_input.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_time.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gem_keytrans.o
+	#load $(AM_CFLAGS) $(GEM_DIR)/gemX_regions.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/univ_map.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/symbol_table.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/registry.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/misc.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/object.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/formula.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/dynarray.o
+	#load $(AM_CFLAGS) $(ORE_DIR)/web.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/standard_slots.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/value_list.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/priority_list.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/opal.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/windows.o
+	#load $(AM_CFLAGS) $(OPAL_DIR)/text_fns.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_basics.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_choice.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_move_grow.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_new_points.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_text.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/inter_animation.o
+	#load $(AM_CFLAGS) $(INTER_DIR)/command_basics.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/inspector.o
+	#load $(AM_CFLAGS) $(DEBUG_DIR)/tracer.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/scroll_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/text_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/editing_commands.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/dialog_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/selection_widgets.o
+	#load $(AM_CFLAGS) $(WIDGETS_DIR)/button_widgets.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/inter_gesture.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_classifier.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_features.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_matrix.o
+	#load $(AM_CFLAGS) $(GESTURE_DIR)/gest_trainer.o
+	#load $(AM_CFLAGS) -I$(GEM_DIR) $(AM_LIBS)
+	#load $(AM_CFLAGS) $(UTILS_DIR)/types.o
+	#load $(AM_CFLAGS) $(UTILS_DIR)/stdvalue.o
+	#setopt program_name testbugs
+
+#
+# >>> End of CenterLine Make Targets <<<

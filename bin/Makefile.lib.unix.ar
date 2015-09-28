@@ -1,0 +1,74 @@
+#
+#   This Makefile.lib file supports linking Amulet test programs and
+#   samples directly with the Amulet object files 
+#
+#   Oh, by the way, it also builds archive libraries for UNIX
+#
+#   Parameters (can be set in Makefile.vars.*):
+#	AR        standard archive program (usually ar)
+#	RANLIB	  random-access organizer (usually ranlib)
+#       LD	  linker (usually ld)
+#
+
+UTILS_LIB =  $(LIB_DIR)/libamutils$(LIB_MODIFIER).a
+GEM_LIB =    $(LIB_DIR)/libamgem$(LIB_MODIFIER).a
+ORE_LIB =    $(LIB_DIR)/libamobject$(LIB_MODIFIER).a
+AMULET_LIB = $(LIB_DIR)/libamulet$(LIB_MODIFIER).a
+
+FULL_AMULET_DEPENDENCIES = $(OPAL_MODULE) $(INTER_MODULE) $(DEBUG_MODULE) \
+    $(WIDGETS_MODULE) $(GESTURE_MODULE) $(ANIM_MODULE) \
+    $(ORE_MODULE) $(GEM_MODULE) $(UTILS_MODULE)
+FULL_ORE_DEPENDENCIES = $(ORE_MODULE) $(UTILS_MODULE)
+FULL_GEM_DEPENDENCIES = $(GEM_MODULE) $(UTILS_MODULE)
+FULL_UTILS_DEPENDENCIES = $(UTILS_MODULE)
+
+# Undefine these parameters, for example
+#	AMULET_LIB_DEPENDENCIES =
+# to keep from rebuilding the Amulet libraries after deleting the
+# Amulet object files 
+AMULET_LIB_DEPENDENCIES = $(FULL_AMULET_DEPENDENCIES)
+ORE_LIB_DEPENDENCIES = $(FULL_ORE_DEPENDENCIES)
+GEM_LIB_DEPENDENCIES = $(FULL_GEM_DEPENDENCIES)
+UTILS_LIB_DEPENDENCIES = $(FULL_UTILS_DEPENDENCIES)
+
+$(AMULET_LIB): $(AMULET_LIB_DEPENDENCIES)
+	-$(RM) $(AMULET_LIB)
+	$(AR) cq $(AMULET_LIB) $(FULL_AMULET_DEPENDENCIES)
+	-$(RANLIB) $(AMULET_LIB)
+
+$(ORE_LIB): $(ORE_LIB_DEPENDENCIES)
+	-$(RM) $(ORE_LIB)
+	$(AR) cq $(ORE_LIB) $(FULL_ORE_DEPENDENCIES)
+	-$(RANLIB) $(ORE_LIB)
+
+$(GEM_LIB): $(GEM_LIB_DEPENDENCIES)
+	-$(RM) $(GEM_LIB)
+	$(AR) cq $(GEM_LIB) $(GEM_LIB_DEPENDENCIES)
+	-$(RANLIB) $(GEM_LIB)
+
+$(UTILS_LIB): $(UTILS_LIB_DEPENDENCIES)
+	-$(RM) $(UTILS_LIB)
+	$(AR) cq $(UTILS_LIB) $(FULL_UTILS_DEPENDENCIES)
+	-$(RANLIB) $(UTILS_LIB)
+
+# Use these declarations to compile tests from individual .o files
+
+NEEDS_GEM = $(FULL_GEM_DEPENDENCIES)
+USES_GEM  = $(NEEDS_GEM)
+STATIC_GEM = $(NEEDS_GEM)
+
+NEEDS_ORE = $(FULL_ORE_DEPENDENCIES)
+USES_ORE  = $(NEEDS_ORE)
+STATIC_ORE = $(NEEDS_ORE)
+
+NEEDS_ALL = $(FULL_AMULET_DEPENDENCIES)
+USES_ALL  = $(NEEDS_ALL)
+STATIC_ALL = $(NEEDS_ALL)
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# Inference rule
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+.cc.o:
+	$(CC) $(CFLAGS) -c $< -o $@

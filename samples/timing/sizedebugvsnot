@@ -1,0 +1,35 @@
+Date: Tue, 18 Feb 97 23:39:11 EST
+From: Robert Miller <rcm@basalt.amulet.cs.cmu.edu>
+To: amulet-internal@basalt.amulet.cs.cmu.edu
+Subject: results of DEBUG v. non-DEBUG measurements
+Reply-to: rcm@cs.cmu.edu
+
+
+
+Here are the results.  Conventional wisdom is borne out, for once!
+Eliminating DEBUG appears to save a factor of 2, both in memory usage
+and in object-creation time.  Considering these numbers, I retract my
+proposal to leave -DDEBUG on all the time, and endorse Rich's
+suggestion: that we have one debug library (with -g -O2 -DDEBUG) and
+one release library (which might as well just be -O2).
+
+-Rob
+
+				    with -DDEBUG 	without	-DDEBUG
+				    ------------	---------------
+
+libamulet.so (code size)	        6701 KB		       6480 KB
+
+testselectionwidget (code size)	        1155 KB	       	       1147 KB
+testselectionwidget (stack+data size)   3232 KB		       1692 KB
+
+Initialize (time)			1498 ms			811 ms
+Create objects from Root (time)	      0.2634 ms		      0.031 ms
+Create objects from Am_Rect (time)    0.6752 ms		     0.4314 ms
+
+
+"code size" came from ls -l.
+"stack+data size" came from "ps aux" (the SZ column).
+"times" came from running timing.
+
+

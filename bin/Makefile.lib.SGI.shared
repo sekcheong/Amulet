@@ -1,0 +1,67 @@
+##
+##  This file builds shared libraries for SGI/CC.  It has been used on
+##  an R10K Max Impact running Irix 6.2 with the "old" compiler (-o32).
+##
+##  This makefile was contributed by Jay Gowdy <Jay_Gowdy@cs.cmu.edu>
+##  and updated by the Amulet group.  The Amulet group has not tested
+##  it on an SGI platform.  Please send any bug reports to
+##  amulet-bugs@cs.cmu.edu. 
+##
+
+SHARED_CC=CC -w -shared 
+
+UTILS_lib=libamutils$(LIB_MODIFIER)
+GEM_lib=libamgem$(LIB_MODIFIER)
+ORE_lib=libamobject$(LIB_MODIFIER)
+AMULET_lib=libamulet$(LIB_MODIFIER)
+
+UTILS_LIB=$(LIB_DIR)/$(UTILS_lib).so
+GEM_LIB=$(LIB_DIR)/$(GEM_lib).so
+ORE_LIB=$(LIB_DIR)/$(ORE_lib).so
+AMULET_LIB=$(LIB_DIR)/$(AMULET_lib).so
+
+V=$(AM_MAJOR_VERSION).$(AM_MINOR_VERSION)
+
+UTILS_ARCHIVE_LIB=  $(LIB_DIR)/$(UTILS_lib)_pic.a
+GEM_ARCHIVE_LIB=    $(LIB_DIR)/$(GEM_lib)_pic.a
+ORE_ARCHIVE_LIB=    $(LIB_DIR)/$(ORE_lib)_pic.a
+AMULET_ARCHIVE_LIB= $(LIB_DIR)/$(AMULET_lib)_pic.a
+
+$(AMULET_LIB): $(AMULET_LIB_DEPENDENCIES)
+	-rm -f $(AMULET_LIB)
+	$(SHARED_CC) $(FULL_AMULET_DEPENDENCIES) -o $(AMULET_LIB)
+
+$(GEM_LIB): $(GEM_LIB_DEPENDENCIES)
+	-rm -f $(GEM_LIB)
+	$(SHARED_CC) $(FULL_GEM_DEPENDENCIES) -o $(GEM_LIB)
+
+$(ORE_LIB): $(ORE_LIB_DEPENDENCIES)
+	-rm -f $(ORE_LIB)
+	$(SHARED_CC) $(FULL_ORE_DEPENDENCIES) -o $(ORE_LIB)
+
+$(UTILS_LIB): $(UTILS_LIB_DEPENDENCIES)
+	-rm -f $(UTILS_LIB)
+	$(SHARED_CC) $(FULL_UTILS_DEPENDENCIES) -o $(UTILS_LIB)
+
+
+# Use these declarations to compile tests against monolithic shared libs.
+
+NEEDS_GEM = $(AMULET_LIB)
+USES_GEM  = -L$(LIB_DIR) -lamulet$(LIB_MODIFIER)
+STATIC_GEM =
+
+NEEDS_ORE = $(AMULET_LIB)
+USES_ORE  = -L$(LIB_DIR) -lamulet$(LIB_MODIFIER)
+STATIC_ORE =
+
+NEEDS_ALL = $(AMULET_LIB)
+USES_ALL  = -L$(LIB_DIR) -lamulet$(LIB_MODIFIER)
+STATIC_ALL =
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# Inference rules
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+.cc.o:
+	$(CC) $(CFLAGS) -c $< -o $@

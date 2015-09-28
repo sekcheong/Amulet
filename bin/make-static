@@ -1,0 +1,1 @@
+make LIB_MAKE='$(AM_STATIC_LIB_MAKE)' $*
